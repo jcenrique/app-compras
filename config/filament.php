@@ -88,6 +88,19 @@ return [
 
     'livewire_loading_delay' => 'default',
 
-    'default_avatar_provider' => UiAvatarsProvider::class,
+    /*
+    |--------------------------------------------------------------------------
+    | System Route Prefix
+    |--------------------------------------------------------------------------
+    |
+    | This is the prefix used for the system routes that Filament registers,
+    | such as the routes for downloading exports and failed import rows.
+    |
+    */
+
+    'system_route_prefix' => 'filament',
+
+
+    'default_avatar_provider' =>UiAvatarsProvider::class,
 
 ];

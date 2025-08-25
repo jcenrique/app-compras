@@ -1,0 +1,485 @@
+[
+    {
+        "name": "Refresco de cola",
+        "description": "Gaseosa con sabor a cola, formato familiar",
+        "price": 1.25,
+        "category": "Refrescos",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Agua mineral natural",
+        "description": "Agua embotellada sin gas de manantial",
+        "price": 0.60,
+        "category": "Aguas minerales",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Zumo de naranja exprimido",
+        "description": "Zumo natural sin azúcares añadidos",
+        "price": 1.80,
+        "category": "Jugos y zumos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Cerveza lager clásica",
+        "description": "Cerveza rubia en lata, pack de 6",
+        "price": 2.95,
+        "category": "Cervezas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Vino tinto crianza",
+        "description": "Vino tinto con denominación de origen",
+        "price": 4.50,
+        "category": "Vinos",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Vodka premium",
+        "description": "Vodka destilado de alta pureza",
+        "price": 9.90,
+        "category": "Bebidas espirituosas",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Bebida energética taurina",
+        "description": "Con cafeína y taurina para mayor energía",
+        "price": 1.20,
+        "category": "Bebidas energéticas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Té verde ecológico",
+        "description": "Infusión natural con propiedades antioxidantes",
+        "price": 2.10,
+        "category": "Infusiones y té",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Café molido mezcla",
+        "description": "Café tostado mezcla natural y torrefacto",
+        "price": 2.95,
+        "category": "Café",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Espaguetis integrales",
+        "description": "Pasta seca de trigo integral",
+        "price": 1.10,
+        "category": "Pastas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Arroz redondo",
+        "description": "Ideal para paellas y platos tradicionales",
+        "price": 0.95,
+        "category": "Arroz",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Lentejas pardinas",
+        "description": "Legumbre seca rica en proteínas",
+        "price": 1.20,
+        "category": "Legumbres",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Atún en aceite de oliva",
+        "description": "Conserva de pescado en lata",
+        "price": 2.50,
+        "category": "Conservas de pescado",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Harina de trigo",
+        "description": "Harina refinada para repostería",
+        "price": 0.80,
+        "category": "Harinas y pan rallado",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Aceite de oliva virgen extra",
+        "description": "Condimento líquido para cocinar y aderezar ensaladas",
+        "price": 4.75,
+        "category": "Aceites y vinagres",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Sal marina fina",
+        "description": "Condimento básico para cocina",
+        "price": 0.65,
+        "category": "Especias y condimentos",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Papas fritas clásicas",
+        "description": "Snack salado crujiente",
+        "price": 1.50,
+        "category": "Snacks salados",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Lasaña boloñesa congelada",
+        "description": "Plato preparado listo para calentar",
+        "price": 3.20,
+        "category": "Comidas preparadas",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Leche semidesnatada",
+        "description": "Leche pasteurizada en brick",
+        "price": 0.89,
+        "category": "Leches",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Yogur natural",
+        "description": "Fermentado lácteo sin azúcar",
+        "price": 0.40,
+        "category": "Yogures",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Queso curado mezcla",
+        "description": "Queso de leche de vaca y oveja",
+        "price": 3.95,
+        "category": "Quesos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Mantequilla tradicional",
+        "description": "Para cocinar o untar",
+        "price": 1.75,
+        "category": "Mantequilla",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Nata para montar",
+        "description": "Ideal para postres y repostería",
+        "price": 1.20,
+        "category": "Nata y crema",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Flan de vainilla",
+        "description": "Postre lácteo listo para servir",
+        "price": 0.95,
+        "category": "Postres lácteos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Leche de avena",
+        "description": "Alternativa vegetal sin lactosa",
+        "price": 1.50,
+        "category": "Leches vegetales",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Filete de ternera",
+        "description": "Corte de carne de vacuno fresco",
+        "price": 5.20,
+        "category": "Carne de vacuno",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Chuletas de cerdo",
+        "description": "Carne fresca para plancha o barbacoa",
+        "price": 4.10,
+        "category": "Carne de cerdo",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Pechuga de pollo",
+        "description": "Carne magra de ave",
+        "price": 3.95,
+        "category": "Carne de ave",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Carne picada mixta",
+        "description": "Preparada para albóndigas o rellenos",
+        "price": 3.50,
+        "category": "Carne picada",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Chorizo ibérico",
+        "description": "Embutido curado tradicional",
+        "price": 2.80,
+        "category": "Embutidos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Jamón cocido extra",
+        "description": "Fiambre bajo en grasa",
+        "price": 2.20,
+        "category": "Jamones y fiambres",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Filete de merluza",
+        "description": "Pescado fresco sin espinas",
+        "price": 4.90,
+        "category": "Pescado fresco",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Gambas peladas congeladas",
+        "description": "Marisco listo para cocinar",
+        "price": 5.50,
+        "category": "Mariscos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Sardinas en aceite",
+        "description": "Conserva de pescado",
+        "price": 1.80,
+        "category": "Conservas de pescado",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Manzanas golden",
+        "description": "Fruta fresca de temporada",
+        "price": 2.10,
+        "category": "Frutas frescas",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Plátanos canarios",
+        "description": "Fruta tropical rica en potasio",
+        "price": 1.50,
+        "category": "Frutas tropicales",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Zanahorias frescas",
+        "description": "Hortalizas como zanahorias, tomates y pimientos",
+        "price": 1.10,
+        "category": "Verduras frescas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Piña tropical",
+        "description": "Piña, mango, papaya y otras frutas exóticas",
+        "price": 2.50,
+        "category": "Frutas tropicales",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Champiñones laminados",
+        "description": "Champiñones, portobellos y variedades silvestres",
+        "price": 1.80,
+        "category": "Setas y hongos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Pan de molde integral",
+        "description": "Pan blanco, integral, de molde, baguette y sin gluten",
+        "price": 1.35,
+        "category": "Pan",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Croissant mantequilla",
+        "description": "Croissants, brioches, ensaimadas y panes dulces",
+        "price": 1.90,
+        "category": "Bollos",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Tarta de queso",
+        "description": "Tartas de crema, chocolate, frutas y bizcochos",
+        "price": 3.95,
+        "category": "Pasteles",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Galletas con chocolate",
+        "description": "Con chocolate, relleno, saladas y dietéticas",
+        "price": 1.70,
+        "category": "Galletas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Bizcocho esponjoso",
+        "description": "Esponjosos, con sabor neutro o decorados",
+        "price": 2.20,
+        "category": "Bizcochos",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Pan sin gluten",
+        "description": "Para personas con intolerancia o dieta libre de gluten",
+        "price": 2.50,
+        "category": "Pan sin gluten",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Brócoli congelado",
+        "description": "Porciones de vegetales listos para cocinar",
+        "price": 1.60,
+        "category": "Verduras congeladas",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Pizza margarita congelada",
+        "description": "Platos como lasañas, pizzas o arroces congelados",
+        "price": 3.10,
+        "category": "Comidas preparadas",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Filete de salmón congelado",
+        "description": "Opciones congeladas del mar y río",
+        "price": 4.80,
+        "category": "Pescados y mariscos",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Helado de vainilla",
+        "description": "Postres fríos como helados, sorbetes y polos",
+        "price": 2.95,
+        "category": "Helados",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Carne de hamburguesa congelada",
+        "description": "Cortes de carne cruda o cocida para preparar",
+        "price": 3.50,
+        "category": "Carnes congeladas",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Detergente líquido Marsella",
+        "description": "Para ropa, vajilla y limpieza general",
+        "price": 3.95,
+        "category": "Detergentes",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Limpiador multiusos limón",
+        "description": "Líquidos para cocina, baño y otras superficies",
+        "price": 2.10,
+        "category": "Limpiadores multiusos",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Ambientador en spray",
+        "description": "Sprays, difusores y aceites aromáticos",
+        "price": 1.80,
+        "category": "Ambientadores",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Papel higiénico doble capa",
+        "description": "Rollos de baño en distintas texturas y capas",
+        "price": 2.95,
+        "category": "Papel higiénico",
+        "market": "Alcampo"
+    },
+    {
+        "name": "Servilletas de papel",
+        "description": "Paquetes y rollos de servilletas y toallitas de cocina",
+        "price": 1.20,
+        "category": "Servilletas y papel",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Champú anticaspa",
+        "description": "Limpieza y cuidado capilar para distintos tipos de cabello",
+        "price": 2.50,
+        "category": "Champú y acondicionador",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Gel de baño aloe vera",
+        "description": "Para higiene corporal, con variedades perfumadas o neutras",
+        "price": 1.80,
+        "category": "Gel y jabón",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Desodorante roll-on",
+        "description": "Protección contra el sudor en formato spray, roll-on o barra",
+        "price": 2.10,
+        "category": "Desodorantes",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Crema hidratante manos",
+        "description": "Hidratación y tratamiento para rostro, manos y cuerpo",
+        "price": 2.75,
+        "category": "Cremas y lociones",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Maquillaje base fluida",
+        "description": "Productos para embellecer rostro, ojos, labios y uñas",
+        "price": 5.90,
+        "category": "Maquillaje",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Pasta dental blanqueadora",
+        "description": "Pastas, enjuagues, cepillos y productos blanqueadores",
+        "price": 1.95,
+        "category": "Higiene dental",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Espuma de afeitar",
+        "description": "Espumas, cuchillas, máquinas y lociones post-afeitado",
+        "price": 2.30,
+        "category": "Afeitado",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Croquetas para perros adultos",
+        "description": "Croquetas, comida húmeda y snacks para perros",
+        "price": 6.50,
+        "category": "Alimento para perros",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Comida húmeda para gatos",
+        "description": "Comida seca y húmeda adaptada a gatos de todas las edades",
+        "price": 3.20,
+        "category": "Alimento para gatos",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Arena aglomerante para gatos",
+        "description": "Tipos de arena para bandejas sanitarias de gatos",
+        "price": 4.10,
+        "category": "Arena",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Snack dental para perros",
+        "description": "Premios y golosinas para entrenamiento y entretenimiento",
+        "price": 2.95,
+        "category": "Snacks",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Pelota con sonido para perros",
+        "description": "Pelotas, cuerdas, túneles y juguetes interactivos",
+        "price": 3.50,
+        "category": "Juguetes",
+        "market": "Mercadona"
+    },
+    {
+        "name": "Collar ajustable para gatos",
+        "description": "Collares, camas, comederos, transportines y más",
+        "price": 2.80,
+        "category": "Accesorios",
+        "market": "Carrefour"
+    },
+    {
+        "name": "Vermut rojo clásico",
+        "description": "Bebidas para el aperitivo, vermut, mostos, bitters",
+        "price": 3.50,
+        "category": "Aperitivos",
+        "market": "Alcampo"
+    }
+]

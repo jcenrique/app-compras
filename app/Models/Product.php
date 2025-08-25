@@ -3,52 +3,83 @@
 namespace App\Models;
 
 use App\Observers\ProductObserver;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use OwenIt\Auditing\Contracts\Auditable;
+use \OwenIt\Auditing\Auditable as AuditingTrait;
 
-#[ObservedBy([ProductObserver::class])]
-class Product extends Model
+/**
+ * Class Product
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $slug
+ * @property string|null $description
+ * @property float $price
+ * @property int|null $category_id
+ * @property int|null $market_id
+ * @property string|null $image
+ * @property bool $is_active
+ * @property string|null $brand
+ */
+#[ObservedBy(ProductObserver::class)]
+class Product extends Model implements Auditable
 {
+    use HasFactory, AuditingTrait;
 
-    use HasFactory;
-
-    protected $fillable =  [
+    protected $fillable = [
         'name',
-        'supermarket_id',
-        'category_id',
-        'unit_id',
+        'slug',
+        'description',
         'price',
-        'units_quantity',
-        'image'
+        'category_id',
+        'market_id',
+        'image',
+        'active',
+        'brand',
+    ];
 
+    protected $casts = [
+        'price' => 'float',
+        'active' => 'boolean',
 
     ];
 
-
-
-    public function category() :BelongsTo {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function supermarket() :BelongsTo {
-        return $this->belongsTo(Supermarket::class);
-    }
-
-    public function unit() :BelongsTo {
-        return $this->belongsTo(Unit::class);
-    }
-
-    public function shoppingLists(): BelongsToMany
+    public function market()
     {
-        return $this->belongsToMany(ShoppingList::class, 'product_shopping_list')->withTimestamps();
+        return $this->belongsTo(Market::class);
+    }
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 
-    
+    /**
+     * Scope a query to only include active products.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+   //crear relacion para marcar el producto como favorito
+   public function favorites(): HasMany
+   {
+       return $this->hasMany(Favorite::class);
+   }
+
 }

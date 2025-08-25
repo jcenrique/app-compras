@@ -1,0 +1,348 @@
+{
+    "supermercado": {
+        "secciones": [
+            {
+                "nombre": "Bebidas",
+                "descripcion": "Líquidos para hidratar, refrescar y celebrar: desde agua hasta bebidas alcohólicas.",
+                "categorias": [
+                    {
+                        "nombre": "Refrescos",
+                        "descripcion": "Gaseosas, sodas y bebidas sin alcohol con sabores variados."
+                    },
+                    {
+                        "nombre": "Aguas minerales",
+                        "descripcion": "Agua embotellada natural o con gas de distintas fuentes."
+                    },
+                    {
+                        "nombre": "Jugos y zumos",
+                        "descripcion": "Extractos de frutas o vegetales, naturales y concentrados."
+                    },
+                    {
+                        "nombre": "Cervezas",
+                        "descripcion": "Lager, ale, artesanal y comerciales, en botellas o latas."
+                    },
+                    {
+                        "nombre": "Vinos",
+                        "descripcion": "Vinos tintos, blancos, rosados y espumosos de diversas bodegas."
+                    },
+                    {
+                        "nombre": "Bebidas espirituosas",
+                        "descripcion": "Licores fuertes como whisky, vodka, ron y ginebra."
+                    },
+                    {
+                        "nombre": "Bebidas energéticas",
+                        "descripcion": "Con cafeína, taurina o estimulantes para mayor energía."
+                    },
+                    {
+                        "nombre": "Infusiones y té",
+                        "descripcion": "Bebidas calientes preparadas con hojas, flores o hierbas."
+                    },
+                    {
+                        "nombre": "Café",
+                        "descripcion": "Molido, en grano, soluble y en cápsulas de distintos orígenes."
+                    }
+                ]
+            },
+            {
+                "nombre": "Alimentación",
+                "descripcion": "Productos básicos para cocinar, conservar y complementar la dieta.",
+                "categorias": [
+                    {
+                        "nombre": "Pastas",
+                        "descripcion": "Tallarines, espaguetis, macarrones y otras formas de pasta seca."
+                    },
+                    {
+                        "nombre": "Arroz",
+                        "descripcion": "Blanco, integral, arborio, salvaje y especialidades asiáticas."
+                    },
+                    {
+                        "nombre": "Legumbres",
+                        "descripcion": "Garbanzos, lentejas, frijoles y otros granos secos."
+                    },
+                    {
+                        "nombre": "Conservas",
+                        "descripcion": "Alimentos preparados y envasados para larga duración."
+                    },
+                    {
+                        "nombre": "Harinas y pan rallado",
+                        "descripcion": "Ingredientes secos usados en repostería o empanados."
+                    },
+                    {
+                        "nombre": "Aceites y vinagres",
+                        "descripcion": "Condimentos líquidos para cocinar y aderezar ensaladas."
+                    },
+                    {
+                        "nombre": "Especias y condimentos",
+                        "descripcion": "Hierbas, sales aromáticas y mezclas para dar sabor."
+                    },
+                    {
+                        "nombre": "Snacks salados",
+                        "descripcion": "Aperitivos como papas fritas, nachos y frutos secos salados."
+                    },
+                    {
+                        "nombre": "Comidas preparadas",
+                        "descripcion": "Platos listos o precocinados para consumo rápido."
+                    }
+                ]
+            },
+            {
+                "nombre": "Lácteos",
+                "descripcion": "Productos derivados de la leche de origen animal o vegetal.",
+                "categorias": [
+                    {
+                        "nombre": "Leches",
+                        "descripcion": "Enteras, semi, desnatadas y vegetales como soja o avena."
+                    },
+                    {
+                        "nombre": "Yogures",
+                        "descripcion": "Fermentados naturales o con fruta, bebibles o sólidos."
+                    },
+                    {
+                        "nombre": "Quesos",
+                        "descripcion": "Frescos, curados, rallados, untables y especiales."
+                    },
+                    {
+                        "nombre": "Mantequilla",
+                        "descripcion": "Tradicional o vegetal para cocinar y untar."
+                    },
+                    {
+                        "nombre": "Nata y crema",
+                        "descripcion": "Para montar, cocinar o acompañar postres."
+                    },
+                    {
+                        "nombre": "Postres lácteos",
+                        "descripcion": "Flanes, natillas, arroz con leche y similares."
+                    },
+                    {
+                        "nombre": "Leches vegetales",
+                        "descripcion": "Almendra, avena, arroz, coco: alternativas sin lactosa."
+                    }
+                ]
+            },
+            {
+                "nombre": "Carnicería",
+                "descripcion": "Variedades de carne fresca y embutidos para cocinar o consumir directamente.",
+                "categorias": [
+                    {
+                        "nombre": "Carne de vacuno",
+                        "descripcion": "Cortes de res como chuletón, filete y carne picada."
+                    },
+                    {
+                        "nombre": "Carne de cerdo",
+                        "descripcion": "Costillas, panceta, chuletas y jamón fresco."
+                    },
+                    {
+                        "nombre": "Carne de ave",
+                        "descripcion": "Pollo, pavo y otras aves domésticas."
+                    },
+                    {
+                        "nombre": "Carne picada",
+                        "descripcion": "Preparada para albóndigas, hamburguesas o rellenos."
+                    },
+                    {
+                        "nombre": "Embutidos",
+                        "descripcion": "Chorizo, salchichón, longaniza y otros embutidos curados."
+                    },
+                    {
+                        "nombre": "Jamones y fiambres",
+                        "descripcion": "Jamón cocido, serrano y fiambres variados."
+                    }
+                ]
+            },
+            {
+                "nombre": "Pescadería",
+                "descripcion": "Productos del mar y río en estado fresco, congelado o conservado.",
+                "categorias": [
+                    {
+                        "nombre": "Pescado fresco",
+                        "descripcion": "Filetes y piezas enteras de pescado recién capturado."
+                    },
+                    {
+                        "nombre": "Mariscos",
+                        "descripcion": "Gambas, mejillones, calamares y otros frutos de mar."
+                    },
+                    {
+                        "nombre": "Pescado congelado",
+                        "descripcion": "Piezas listas para cocinar almacenadas a baja temperatura."
+                    },
+                    {
+                        "nombre": "Conservas de pescado",
+                        "descripcion": "Pescado enlatado como atún, sardinas o caballa."
+                    }
+                ]
+            },
+            {
+                "nombre": "Frutas y verduras",
+                "descripcion": "Productos frescos vegetales para consumir crudos o cocidos.",
+                "categorias": [
+                    {
+                        "nombre": "Frutas frescas",
+                        "descripcion": "Manzanas, peras, cítricos, plátanos y frutos rojos."
+                    },
+                    {
+                        "nombre": "Verduras frescas",
+                        "descripcion": "Hortalizas como zanahorias, tomates y pimientos."
+                    },
+                    {
+                        "nombre": "Frutas tropicales",
+                        "descripcion": "Piña, mango, papaya y otras frutas exóticas."
+                    },
+                    {
+                        "nombre": "Setas y hongos",
+                        "descripcion": "Champiñones, portobellos y variedades silvestres."
+                    },
+                    {
+                        "nombre": "Hierbas aromáticas",
+                        "descripcion": "Perejil, albahaca, cilantro, tomillo y romero."
+                    }
+                ]
+            },
+            {
+                "nombre": "Panadería y bollería",
+                "descripcion": "Productos horneados dulces y salados listos para consumir.",
+                "categorias": [
+                    {
+                        "nombre": "Pan",
+                        "descripcion": "Pan blanco, integral, de molde, baguette y sin gluten."
+                    },
+                    {
+                        "nombre": "Bollos",
+                        "descripcion": "Croissants, brioches, ensaimadas y panes dulces."
+                    },
+                    {
+                        "nombre": "Pasteles",
+                        "descripcion": "Tartas de crema, chocolate, frutas y bizcochos."
+                    },
+                    {
+                        "nombre": "Galletas",
+                        "descripcion": "Con chocolate, relleno, saladas y dietéticas."
+                    },
+                    {
+                        "nombre": "Bizcochos",
+                        "descripcion": "Esponjosos, con sabor neutro o decorados."
+                    },
+                    {
+                        "nombre": "Pan sin gluten",
+                        "descripcion": "Para personas con intolerancia o dieta libre de gluten."
+                    }
+                ]
+            },
+            {
+                "nombre": "Congelados",
+                "descripcion": "Alimentos conservados por frío para mayor duración.",
+                "categorias": [
+                    {
+                        "nombre": "Verduras congeladas",
+                        "descripcion": "Porciones de vegetales listos para cocinar."
+                    },
+                    {
+                        "nombre": "Comidas preparadas",
+                        "descripcion": "Platos como lasañas, pizzas o arroces congelados."
+                    },
+                    {
+                        "nombre": "Pescados y mariscos",
+                        "descripcion": "Opciones congeladas del mar y río."
+                    },
+                    {
+                        "nombre": "Helados",
+                        "descripcion": "Postres fríos como helados, sorbetes y polos."
+                    },
+                    {
+                        "nombre": "Carnes congeladas",
+                        "descripcion": "Cortes de carne cruda o cocida para preparar."
+                    }
+                ]
+            },
+            {
+                "nombre": "Limpieza y hogar",
+                "descripcion": "Productos de aseo y mantenimiento del hogar.",
+                "categorias": [
+                    {
+                        "nombre": "Detergentes",
+                        "descripcion": "Para ropa, vajilla y limpieza general."
+                    },
+                    {
+                        "nombre": "Limpiadores multiusos",
+                        "descripcion": "Líquidos para cocina, baño y otras superficies."
+                    },
+                    {
+                        "nombre": "Ambientadores",
+                        "descripcion": "Sprays, difusores y aceites aromáticos."
+                    },
+                    {
+                        "nombre": "Papel higiénico",
+                        "descripcion": "Rollos de baño en distintas texturas y capas."
+                    },
+                    {
+                        "nombre": "Servilletas y papel",
+                        "descripcion": "Paquetes y rollos de servilletas y toallitas de cocina."
+                    }
+                ]
+            },
+            {
+                "nombre": "Cuidado personal",
+                "descripcion": "Productos para la higiene, estética y bienestar individual.",
+                "categorias": [
+                    {
+                        "nombre": "Champú y acondicionador",
+                        "descripcion": "Limpieza y cuidado capilar para distintos tipos de cabello."
+                    },
+                    {
+                        "nombre": "Gel y jabón",
+                        "descripcion": "Para higiene corporal, con variedades perfumadas o neutras."
+                    },
+                    {
+                        "nombre": "Desodorantes",
+                        "descripcion": "Protección contra el sudor en formato spray, roll-on o barra."
+                    },
+                    {
+                        "nombre": "Cremas y lociones",
+                        "descripcion": "Hidratación y tratamiento para rostro, manos y cuerpo."
+                    },
+                    {
+                        "nombre": "Maquillaje",
+                        "descripcion": "Productos para embellecer rostro, ojos, labios y uñas."
+                    },
+                    {
+                        "nombre": "Higiene dental",
+                        "descripcion": "Pastas, enjuagues, cepillos y productos blanqueadores."
+                    },
+                    {
+                        "nombre": "Afeitado",
+                        "descripcion": "Espumas, cuchillas, máquinas y lociones post-afeitado."
+                    }
+                ]
+            },
+            {
+                "nombre": "Mascotas",
+                "descripcion": "Todo lo necesario para alimentar y cuidar animales domésticos.",
+                "categorias": [
+                    {
+                        "nombre": "Alimento para perros",
+                        "descripcion": "Croquetas, comida húmeda y snacks para perros."
+                    },
+                    {
+                        "nombre": "Alimento para gatos",
+                        "descripcion": "Comida seca y húmeda adaptada a gatos de todas las edades."
+                    },
+                    {
+                        "nombre": "Arena",
+                        "descripcion": "Tipos de arena para bandejas sanitarias de gatos."
+                    },
+                    {
+                        "nombre": "Snacks",
+                        "descripcion": "Premios y golosinas para entrenamiento y entretenimiento."
+                    },
+                    {
+                        "nombre": "Juguetes",
+                        "descripcion": "Pelotas, cuerdas, túneles y juguetes interactivos."
+                    },
+                    {
+                        "nombre": "Accesorios",
+                        "descripcion": "Collares, camas, comederos, transportines y más."
+                    }
+                ]
+            }
+        ]
+    }
+}

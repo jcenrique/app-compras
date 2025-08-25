@@ -3,17 +3,25 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Observers\UserObserver;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+#[ObservedBy(UserObserver::class)]
+class User extends Authenticatable implements Auditable , FilamentUser ,  MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    use HasRoles;
-
+     use HasRoles;
+      use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +33,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    protected string $guard_name = 'web';
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,5 +55,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+     public function canAccessPanel(Panel $panel): bool
+    {
+        return str_ends_with($this->email, '@free.fr') && $this->hasVerifiedEmail();
     }
 }

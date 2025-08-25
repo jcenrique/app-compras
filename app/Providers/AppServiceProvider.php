@@ -2,54 +2,71 @@
 
 namespace App\Providers;
 
-use App\Models\Product;
-use App\Observers\ProductObserver;
-use Illuminate\Support\ServiceProvider;
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-use Filament\Support\View\Components\Modal;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
-//use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
+use Illuminate\Support\ServiceProvider;
+use App\Http\Responses\RegisterResponse;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\TextInput;
+use Filament\Support\View\Components\Modal;
+use Illuminate\Foundation\Vite;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        Product::observe(ProductObserver::class);
+        Filament::serving(function () {
+            Filament::registerTheme(app(Vite::class)(['resources/css/app.css']));
+        });
+        TextInput::configureUsing(function (TextInput $input) {
+            $input->mutateDehydratedStateUsing(function ($state) {
+                return Str::trim($state);
+            });
+        });
         Modal::closedByClickingAway(false);
+        Modal::closedByEscaping(false);
+        PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+            $panelSwitch
+                ->modalHeading(__('common.panel_avalaible_titles.title'))
+                ->visible(fn(): bool => auth()->user()?->hasAnyRole([
+                    'admin',
+                    'usuario',
+                    'super_admin',
+                ]))
+                ->modalWidth('sm')
+                ->panels(['admin', 'app'])
+                ->labels([
+                    'admin' => __('common.panel_avalaible_titles.admin'),
+                    'app' => __('common.panel_avalaible_titles.app')
+                ])
+                ->icons([
+                    'admin' => 'heroicon-o-square-2-stack',
+                    'app' => 'heroicon-o-star',
+                ], $asImage = false)
+            ;
+        });
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['es', 'fr', 'en'])
+                ->locales(['es', 'fr', 'en', 'eu'])
+                ->circular()
                 ->flags([
                     'es' => asset('flags/es.svg'),
                     'fr' => asset('flags/fr.svg'),
                     'en' => asset('flags/us.svg'),
-                ]); // also accepts a closure
-        });
 
-        PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-
-            $panelSwitch->modalHeading(__('Available panels'))
-                ->visible(true)
-                ->modalWidth('sm')
-                ->labels([
-                    'admin' => __('Administration panel'),
-                    'app' => __('Aplication panel')
-                ])
-                ->icons([
-                    'app' => 'heroicon-o-square-2-stack',
-                    'admin' => 'heroicon-o-star',
-                ], $asImage = false);
+                    'eu' => asset('flags/es-pv.svg'),
+                ]);
         });
     }
 }
