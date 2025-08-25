@@ -1,0 +1,169 @@
+{
+    "supermercados": [
+      {
+        "nombre": "Mercadona",
+        "secciones": [
+          {
+            "nombre": "Frutas y Verduras",
+            "categorias": [
+              {
+                "categoria": "Frutas frescas",
+                "productos": [
+                  {
+                    "nombre": "Plátanos",
+                    "unidad": "1 kg",
+                    "precio": 1.85
+                  },
+                  {
+                    "nombre": "Manzanas",
+                    "unidad": "1 kg",
+                    "precio": 2.50
+                  }
+                ]
+              },
+              {
+                "categoria": "Verduras frescas",
+                "productos": [
+                  {
+                    "nombre": "Lechuga",
+                    "unidad": "1 pieza",
+                    "precio": 1.00
+                  },
+                  {
+                    "nombre": "Tomates",
+                    "unidad": "1 kg",
+                    "precio": 2.20
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "nombre": "Carnicería",
+            "categorias": [
+              {
+                "categoria": "Carne de pollo",
+                "productos": [
+                  {
+                    "nombre": "Pollo entero",
+                    "unidad": "1 kg",
+                    "precio": 5.20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Carrefour",
+        "secciones": [
+          {
+            "nombre": "Bebidas",
+            "categorias": [
+              {
+                "categoria": "Refrescos",
+                "productos": [
+                  {
+                    "nombre": "Coca-Cola",
+                    "unidad": "1.5 litros",
+                    "precio": 1.75
+                  }
+                ]
+              },
+              {
+                "categoria": "Jugos",
+                "productos": [
+                  {
+                    "nombre": "Zumo de naranja",
+                    "unidad": "1 litro",
+                    "precio": 2.00
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "nombre": "Lácteos",
+            "categorias": [
+              {
+                "categoria": "Leche",
+                "productos": [
+                  {
+                    "nombre": "Leche semidesnatada",
+                    "unidad": "1 litro",
+                    "precio": 0.95
+                  }
+                ]
+              },
+              {
+                "categoria": "Yogures",
+                "productos": [
+                  {
+                    "nombre": "Yogur natural",
+                    "unidad": "pack de 4",
+                    "precio": 1.60
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Leclerc",
+        "secciones": [
+          {
+            "nombre": "Panadería",
+            "categorias": [
+              {
+                "categoria": "Pan",
+                "productos": [
+                  {
+                    "nombre": "Croissant",
+                    "unidad": "1 pieza",
+                    "precio": 1.10
+                  }
+                ]
+              },
+              {
+                "categoria": "Pasteles",
+                "productos": [
+                  {
+                    "nombre": "Pan de molde",
+                    "unidad": "1 paquete",
+                    "precio": 1.80
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "nombre": "Limpieza",
+            "categorias": [
+              {
+                "categoria": "Detergentes",
+                "productos": [
+                  {
+                    "nombre": "Detergente para ropa",
+                    "unidad": "2 litros",
+                    "precio": 5.50
+                  }
+                ]
+              },
+              {
+                "categoria": "Productos multiusos",
+                "productos": [
+                  {
+                    "nombre": "Limpiador multiusos",
+                    "unidad": "1 litro",
+                    "precio": 3.20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

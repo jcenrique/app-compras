@@ -1,0 +1,88 @@
+{
+    "categorias": [
+      {
+        "seccion": "Frutas y Verduras",
+        "productos": [
+          "Frutas frescas",
+          "Verduras frescas",
+          "Hierbas y especias frescas"
+        ]
+      },
+      {
+        "seccion": "Carnicería",
+        "productos": [
+          "Carne de ternera",
+          "Carne de cerdo",
+          "Carne de pollo",
+          "Otros tipos de carne"
+        ]
+      },
+      {
+        "seccion": "Panadería",
+        "productos": [
+          "Pan",
+          "Pasteles",
+          "Galletas"
+        ]
+      },
+      {
+        "seccion": "Lácteos",
+        "productos": [
+          "Leche",
+          "Yogures",
+          "Queso",
+          "Mantequilla"
+        ]
+      },
+      {
+        "seccion": "Congelados",
+        "productos": [
+          "Vegetales congelados",
+          "Carnes congeladas",
+          "Postres congelados"
+        ]
+      },
+      {
+        "seccion": "Abarrotes",
+        "productos": [
+          "Arroz",
+          "Pastas",
+          "Productos enlatados"
+        ]
+      },
+      {
+        "seccion": "Bebidas",
+        "productos": [
+          "Agua",
+          "Jugos",
+          "Refrescos",
+          "Vinos",
+          "Cervezas"
+        ]
+      },
+      {
+        "seccion": "Higiene y Belleza",
+        "productos": [
+          "Champús",
+          "Cremas",
+          "Maquillaje"
+        ]
+      },
+      {
+        "seccion": "Limpieza",
+        "productos": [
+          "Detergentes",
+          "Desinfectantes",
+          "Productos multiusos"
+        ]
+      },
+      {
+        "seccion": "Mascotas",
+        "productos": [
+          "Alimentos para mascotas",
+          "Accesorios para mascotas",
+          "Juguetes para mascotas"
+        ]
+      }
+    ]
+  }
