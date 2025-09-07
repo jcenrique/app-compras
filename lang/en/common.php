@@ -91,6 +91,9 @@ return [
 
     'client_resource_label' => 'Client',
     'client_resource_plural_label' => 'Clients',
+    'verification_email_sent' => 'Verification email sent',
+    'resend_verification_email' => 'Resend verification email',
+    'verification_email_resent' => 'Verification email resent',
 
     /*|--------------------------------------------------------------------------
     | Order Resource

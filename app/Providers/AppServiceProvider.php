@@ -57,9 +57,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $defaultLocale = config('app.locale', 'es'); // Obtiene el idioma por defecto
             $switch
                 ->locales(['es', 'fr', 'en', 'eu'])
                 ->circular()
+                
                 ->flags([
                     'es' => asset('flags/es.svg'),
                     'fr' => asset('flags/fr.svg'),

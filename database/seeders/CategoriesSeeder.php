@@ -15,11 +15,45 @@ use Illuminate\Support\Str;
 
 class CategoriesSeeder extends Seeder
 {
+
+    protected $market_id ; // ID del mercado Mercadona en la tabla markets
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+
+        $folder = 'images';
+
+ 
+        if (!Storage::disk('public')->exists($folder)) {
+            Storage::disk('public')->makeDirectory($folder);
+        }
+
+       
+        if (!Storage::disk('public')->exists($folder . '/products')) {
+            Storage::disk('public')->makeDirectory($folder . '/products');
+        }
+        //crear el supermercado Mercadona si no existe con eloquent
+        $existingMarket = DB::table('markets')->where('name', 'Mercadona')->first();
+        if ($existingMarket) {
+            $this->market_id = $existingMarket->id;
+          } else {  
+           
+            $this->market_id = DB::table('markets')->insertGetId([
+                'name' => 'Mercadona',
+                'slug' => 'mercadona',
+                
+                'active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    }
+      
+
+
+
+        // eliminar todas las categorias y secciones existentes
         Category::where('id', '!=', null)->delete();
         Section::where('id', '!=', null)->delete();
         $this->ablancodev_get_categories();
@@ -90,6 +124,9 @@ class CategoriesSeeder extends Seeder
                 foreach ($category->categories as $cat_info) {
 
                     foreach ($cat_info->products as $product) {
+                        //solo quiero el primer producto de la categoria para la demo y salir del bucle
+
+
                         $productDetails = $this->getProductById($product->id);
                         if ($productDetails) {
 
@@ -126,7 +163,6 @@ class CategoriesSeeder extends Seeder
 
                             if ($existingProduct) {
                                 echo 'El producto ' . $productDetails->display_name . ' ya existe en la base de datos.' . "\n";
-
                             } else {
                                 Product::create([
                                     'name' => $productName,
@@ -136,11 +172,13 @@ class CategoriesSeeder extends Seeder
                                     'slug' => $productDetails->slug . '_' . $productDetails->id,
                                     'description' => $description,
                                     'image' => $fileimage,
-                                    'market_id' => 1
+                                    'market_id' => $this->market_id 
 
                                 ]);
                             }
                         }
+
+                        break; // Salir del bucle después del primer producto
                     }
 
                     // Llamamos a dicha categoría para ver si tiene más niveles

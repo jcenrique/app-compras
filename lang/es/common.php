@@ -93,6 +93,10 @@ return [
     'client_resource_label' => 'Cliente',
     'client_resource_plural_label' => 'Clientes',
 
+    'verification_email_sent' => 'Email de verificación enviado',
+    'resend_verification_email' => 'Reenviar email de verificación',
+    'verification_email_resent' => 'Email de verificación reenviado',
+
         /*|--------------------------------------------------------------------------
     | Section Resource
     |--------------------------------------------------------------------------

@@ -61,27 +61,15 @@ class ClientResource extends Resource
                 Forms\Components\Toggle::make('active')
                     ->inline(false),
 
-                Forms\Components\DateTimePicker::make('email_verified_at')
-                    ->label(__('common.email_verified_at'))
-                    ->hiddenOn('edit'),
-
-
+              
 
                 Forms\Components\TextInput::make('password')
                     ->password()
+                    ->hiddenOn('edit')
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\Select::make('roles')
-                    ->label(__('filament-shield::filament-shield.resource.label.roles'))
-                    ->relationship(
-                        name: 'roles',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query) => $query->where('guard_name', 'client'),
-                    )
-                    ->multiple()
-                    ->preload()
-                    ->searchable(),
+             
             ]);
     }
 
@@ -127,19 +115,20 @@ class ClientResource extends Resource
                 Tables\Actions\DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
-                    Tables\Actions\Action::make('resend_verification_email')
-                    ->tooltip((__('common.Resend Verification Email')))
+                    Tables\Actions\Action::make(__('common.resend_verification_email'))
+                    ->tooltip(__('common.resend_verification_email'))
                     ->hiddenLabel(true)
                     ->icon('heroicon-o-envelope')
                     ->authorize(fn(Client $record) => !$record->hasVerifiedEmail())
                     ->action(function (Client $record) {
                         $notification = new VerifyEmail();
-                        $notification->url = filament()->getVerifyEmailUrl($record);
+                        $notification->url = filament()->getPanel('app')->getVerifyEmailUrl($record);
 
                         $record->notifyNow($notification);
 
                         Notification::make()
-                            ->title("Verification email has been resent.")
+                            ->title(__('common.verification_email_resent'))
+                            ->success()
                             ->send();
                     })
                     ->requiresConfirmation(),

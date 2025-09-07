@@ -97,6 +97,9 @@ return [
 
     'client_resource_label' => 'Client',
     'client_resource_plural_label' => 'Clients',
+    'verification_email_sent' => 'Email de vérification envoyé',
+    'resend_verification_email' => 'Renvoyer l\'email de vérification',
+    'verification_email_resent' => 'Email de vérification renvoyé',
 
 
     /*|--------------------------------------------------------------------------

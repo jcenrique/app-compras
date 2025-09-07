@@ -93,6 +93,9 @@ return [
 
     'client_resource_label' => 'Bezero',
     'client_resource_plural_label' => 'Bezeroak',
+    'verification_email_sent' => 'Berrespen-emaila bidali da',
+    'resend_verification_email' => 'Berrespen-emaila berriro bidali',
+    'verification_email_resent' => 'Berrespen-emaila berriro bidali da',
 
      /*|--------------------------------------------------------------------------
     | Order Resource

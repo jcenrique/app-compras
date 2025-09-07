@@ -30,6 +30,8 @@ class AppPanelProvider extends PanelProvider
         return $panel
             ->id('app')
             ->path('')
+             ->authGuard('client') // this is the main addition
+             ->authPasswordBroker('clients')
             ->login()
             ->registration()
             ->passwordReset()
@@ -71,7 +73,7 @@ class AppPanelProvider extends PanelProvider
                 GravatarPlugin::make(),
             ])
 
-              ->authGuard('client') // this is the main addition
+             
 
             ->authMiddleware([
                 Authenticate::class,

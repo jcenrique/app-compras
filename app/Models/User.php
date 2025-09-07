@@ -32,6 +32,7 @@ class User extends Authenticatable implements Auditable , FilamentUser ,  MustVe
         'name',
         'email',
         'password',
+        'email_verified_at',
     ];
     protected string $guard_name = 'web';
     /**
@@ -43,6 +44,15 @@ class User extends Authenticatable implements Auditable , FilamentUser ,  MustVe
         'password',
         'remember_token',
     ];
+
+    // asignar rol por defecto
+     protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            if ($user->roles->isEmpty()) $user->assignRole('admin');
+          
+        });
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -59,6 +69,7 @@ class User extends Authenticatable implements Auditable , FilamentUser ,  MustVe
 
      public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@free.fr') && $this->hasVerifiedEmail();
+         
+        return  true;
     }
 }
