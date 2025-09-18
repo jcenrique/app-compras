@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class CategoriesSeeder extends Seeder
 {
 
-    protected $market_id ; // ID del mercado Mercadona en la tabla markets
+    protected $market_id; // ID del mercado Mercadona en la tabla markets
     /**
      * Run the database seeds.
      */
@@ -25,31 +25,38 @@ class CategoriesSeeder extends Seeder
 
         $folder = 'images';
 
- 
+        if (Storage::disk('public')->exists($folder . '/products')) {
+            Storage::disk('public')->deleteDirectory($folder . '/products');
+        }
+
         if (!Storage::disk('public')->exists($folder)) {
+
             Storage::disk('public')->makeDirectory($folder);
         }
 
-       
+
         if (!Storage::disk('public')->exists($folder . '/products')) {
             Storage::disk('public')->makeDirectory($folder . '/products');
         }
+
+        //borrar todas las imagenes del directorio products
+
         //crear el supermercado Mercadona si no existe con eloquent
         $existingMarket = DB::table('markets')->where('name', 'Mercadona')->first();
         if ($existingMarket) {
             $this->market_id = $existingMarket->id;
-          } else {  
-           
+        } else {
+
             $this->market_id = DB::table('markets')->insertGetId([
                 'name' => 'Mercadona',
                 'slug' => 'mercadona',
-                
+
                 'active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-    }
-      
+        }
+
 
 
 
@@ -172,13 +179,14 @@ class CategoriesSeeder extends Seeder
                                     'slug' => $productDetails->slug . '_' . $productDetails->id,
                                     'description' => $description,
                                     'image' => $fileimage,
-                                    'market_id' => $this->market_id 
+                                    'market_id' => $this->market_id
 
                                 ]);
+                                echo '       ' . $productName . "\n";
                             }
                         }
 
-                        break; // Salir del bucle después del primer producto
+                        //  break; // Salir del bucle después del primer producto
                     }
 
                     // Llamamos a dicha categoría para ver si tiene más niveles

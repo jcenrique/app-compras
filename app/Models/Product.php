@@ -6,6 +6,7 @@ use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use \OwenIt\Auditing\Auditable as AuditingTrait;
@@ -77,9 +78,9 @@ class Product extends Model implements Auditable
     }
 
    //crear relacion para marcar el producto como favorito
-   public function favorites(): HasMany
+   public function favorites(): BelongsToMany
    {
-       return $this->hasMany(Favorite::class);
+       return $this->belongsToMany(Client::class,'favorites')->withPivot('client_id');
    }
 
 }

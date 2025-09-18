@@ -77,6 +77,8 @@ return [
     'product_created' => 'Produit créé avec succès.',
     'is_favorite' => 'Favori',
     'show_favorites' => 'Afficher les favoris',
+    'inactive' => 'Inactif',
+    'update_price' => 'Mettre à jour les produits',
 
 
 

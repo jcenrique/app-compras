@@ -75,6 +75,8 @@ return [
     'product_created' => 'Product created successfully.',
     'is_favorite' => 'Favorite',
     'show_favorites' => 'Show favorites',
+    'inactive' => 'Idle',
+    'update_price' => 'Update products',
 
           /*|--------------------------------------------------------------------------
     | Section Resource

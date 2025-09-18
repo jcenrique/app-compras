@@ -76,6 +76,8 @@ return [
     'product_created' => 'Produktua ondo sortu da.',
     'is_favorite' => 'Gogokoena',
     'show_favorites' => 'Gogokoenak erakutsi',
+    'inactive' => 'Inaktibo',
+    'update_price' => 'Produktuak eguneratu',
 
     /*|--------------------------------------------------------------------------
     | Section Resource

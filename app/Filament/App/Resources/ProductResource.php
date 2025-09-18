@@ -4,16 +4,28 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\ProductResource\Pages;
 use App\Filament\App\Resources\ProductResource\RelationManagers;
-
+use App\Models\Category;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Tables\Columns\MarKetColumn;
 use Filament\Forms;
+use Filament\Forms\Components\Grid as ComponentsGrid;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\FontFamily;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Grid;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
@@ -38,7 +50,8 @@ class ProductResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+       
+        return Favorite::where('client_id', Auth::id())->get()->count();
     }
 
     public static function getModelLabel(): string
@@ -53,45 +66,61 @@ class ProductResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+
             ->schema([
+
+
                 Forms\Components\TextInput::make('name')
                     ->label(__('common.name'))
                     ->required()
+                    ->columnSpanFull()
                     ->maxLength(255),
+
                 Forms\Components\Toggle::make('active')
                     ->label(__('common.active'))
+                    ->onIcon('fas-circle-check')
+                    ->offIcon('fas-ban')
                     ->default(true)
                     ->inline(false)
                     ->required(),
+
                 //marcar el producto como favorito para el cliente logeado
                 Forms\Components\Toggle::make('is_favorite')
+                    
                     ->label(__('common.is_favorite'))
+                    ->afterStateHydrated(function (Forms\Components\Toggle $component , ?Product $record) {
+                       if($record){
+                            $component->state($record->favorites()->where('client_id', Auth::id())->exists());
+                       }else{
+                            $component->state(true);
+                       }
+                       
+                    })
+                    
+                    
+                   
+                     ->afterStateUpdated(function ($state, Product $record) {
+                      
+                        if ($state) {
+                            $record->favorites()->syncWithoutDetaching([Auth::id()]);
+                        } else {
+                            $record->favorites()->detach(Auth::id());
+                        }
+                    })
+                    ->onColor('success')
+                    ->onIcon('fas-bookmark')
+                    ->offIcon('fas-rectangle-xmark')
+                    ->inline(false),
 
-                    ->default(false),
+
+
+
                 Forms\Components\RichEditor::make('description')
-                    ->label(__('common.description'))
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('price')
-                    ->label(__('common.price'))
-                    ->default(0)
-                    ->required()
-                    ->numeric()
-                    ->prefix('€'),
-                Forms\Components\TextInput::make('brand')
-                    ->label(__('common.brand'))
-                    ->maxLength(255),
-                Forms\Components\Select::make('category_id')
-                    ->label(__('common.category'))
-                    ->relationship(
-                        name: 'category',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query) => $query->active()->orderBy('name'),
-                    )
-                    ->searchable()
-                    ->required()
-                    ->preload(),
+
                 Forms\Components\Select::make('market_id')
                     ->label(__('common.market'))
+
                     ->relationship(
                         name: 'market',
                         titleAttribute: 'name',
@@ -100,117 +129,190 @@ class ProductResource extends Resource
                     ->searchable()
                     ->required()
                     ->preload(),
+
+                Forms\Components\TextInput::make('price')
+                    ->label(__('common.price'))
+                    ->default(0)
+                    ->required()
+                    ->numeric()
+                    ->prefix('€'),
+
+
+
+
+                Forms\Components\Select::make('section_id')
+                    ->live()
+
+                    ->label(__('common.section_resource_label'))
+                    ->dehydrated(false)
+                    ->afterStateUpdated(function (Set $set, $state) {
+                        $set('category_id', null);
+                    })
+                    ->relationship(
+                        name: 'category.section',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn(Builder $query) => $query->active()->orderBy('name'),
+                    )
+
+                    ->searchable()
+                    ->required()
+                    ->preload(),
+                Forms\Components\Select::make('category_id')
+                    ->label(__('common.category'))
+
+                    ->options(function (?Product $record, Forms\Get $get, Forms\Set $set) {
+                        if (! empty($record) && empty($get('section_id'))) {
+                            $set('section_id', $record->category->section_id);
+                            $set('category_id', $record->category_id);
+                        }
+                        return Category::where('section_id', $get('section_id'))->active()->orderBy('name')->pluck('name', 'id');
+                    })
+                    ->live()
+                    ->searchable()
+                    ->required()
+                    ->preload(),
+
+                Forms\Components\TextInput::make('brand')
+                    ->label(__('common.brand'))
+                    ->maxLength(255),
+
                 Forms\Components\FileUpload::make('image')
+                    ->columnSpanFull()
                     ->label(__('common.image'))
                     ->directory('images/products')
                     ->imageEditor()
-                    ->image()
-                    ->columnSpanFull(),
+                    ->image(),
 
 
-            ])->columns(3);
+            ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
 
-            ->striped()
-             ->deferLoading()
+            //  ->striped()
+
+            ->deferLoading()
             ->paginated()
-             ->defaultPaginationPageOption(25)
+            ->defaultPaginationPageOption(25)
             ->extremePaginationLinks()
-            ->defaultGroup('category.name')
             ->defaultSort('name', 'asc')
-            ->groups([
-                Group::make('category.name')
-                    ->titlePrefixedWithLabel(false)
-                    ->getDescriptionFromRecordUsing(function (Product $record) {
-                        return $record->category->description;
-                    })
-                    ->label(__('common.category'))
-                    ->collapsible(),
-                Group::make('market.name')
-                    ->titlePrefixedWithLabel(false)
-                    ->label(__('common.market'))
-                    ->collapsible(),
+
+            ->columns([
+                Grid::make()
+                    ->grow(true)
+                    ->columns(1)
+                    ->schema([
+                        Split::make([
+                            Grid::make()
+                                ->columns(1)
+                                ->schema([
+                                    Tables\Columns\ImageColumn::make('image')
+                                        ->alignment(Alignment::Center)
+                                        ->size(150),
+                                ])->grow(false),
+
+
+                            Grid::make()
+                                ->columns(1)
+                                ->schema([
+
+                                    Tables\Columns\TextColumn::make('category.name')
+                                        ->color('gray')
+                                        ->prefix(__('common.category') . ': ')
+                                        ->hidden(function (Table $table) {
+                                            if ($table->getGrouping() && $table->getGrouping()->getId() === 'category.name') {
+                                                return true;
+                                            }
+                                        })
+                                        ->label(__('common.category'))
+                                        ->sortable(),
+                                    //columna para marcar favoritos
+                                    Split::make([
+                                        Tables\Columns\TextColumn::make('text1')
+                                            ->color('warning')
+                                            ->default(function ($record) {
+                                                return __('common.is_favorite');
+                                            }),
+                                        Tables\Columns\ToggleColumn::make('is_favorite')
+                                            ->onColor('success')
+                                            ->label(__('common.is_favorite'))
+                                            ->tooltip(__('common.is_favorite'))
+                                            ->updateStateUsing(function ($record, $state) {
+                                                if ($state) {
+                                                    $record->favorites()->attach(Auth::id());
+                                                 
+                                                } else {
+                                                    $record->favorites()->detach(Auth::id());
+                                               
+                                                }
+                                            })
+                                            ->getStateUsing(function ($record) {
+                                               
+                                                return $record->favorites()->where('client_id', Auth::id())->exists();
+                                            }),
+
+                                    ]),
+
+
+                                    Grid::make()
+                                        ->columns(1)
+                                        ->schema([
+
+
+                                            Tables\Columns\TextColumn::make('name')
+                                                ->label(__('common.name'))
+                                                ->iconColor('danger')
+                                                ->icon('fas-tag')
+
+                                                ->weight(FontWeight::Bold)
+
+
+                                                ->sortable()
+                                                ->searchable(),
+
+                                            Tables\Columns\TextColumn::make('price')
+                                                ->label(__('common.price'))
+
+                                                ->size(TextColumnSize::Large)
+                                                ->money('EUR')
+                                                ->sortable(),
+                                            Split::make([
+                                                Tables\Columns\TextColumn::make('text')
+                                                    ->color('warning')
+                                                    ->default(function ($record) {
+                                                        return $record->active ? __('common.active') : __('common.inactive');
+                                                    }),
+                                                Tables\Columns\ToggleColumn::make('active')
+
+                                                    ->label(__('common.active')),
+
+
+                                            ]),
+
+
+                                            Tables\Columns\TextColumn::make('brand')
+                                                ->label(__('common.brand'))
+
+                                                ->sortable()
+                                                ->searchable(),
+
+                                        ])
+
+                                ]),
+
+
+                        ])
+                    ])
 
 
             ])
-            ->columns([
-
-                //columna para marcar favoritos
-                Tables\Columns\ToggleColumn::make('is_favorite')
-                    ->label(__('common.is_favorite'))
-                    ->updateStateUsing(function ($record, $state) {
-                        if ($state) {
-                            $record->favorites()->updateOrCreate(
-                                ['client_id' => Auth::id()],
-                                ['product_id' => $record->id]
-                            );
-                        } else {
-                            $record->favorites()->where('client_id', Auth::id())->delete();
-                        }
-                    })
-                    ->getStateUsing(function ($record) {
-                        // Usa la relación ya cargada para evitar consultas adicionales
-                        if ($record->relationLoaded('favorites')) {
-                            return $record->favorites->where('client_id', Auth::id())->isNotEmpty();
-                        }
-                        return $record->favorites()->where('client_id', Auth::id())->exists();
-                    })
-                   ,
-                Tables\Columns\TextColumn::make('name')
-                    ->label(__('common.name'))
-                   ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('price')
-                    ->label(__('common.price'))
-                    ->money('EUR')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('category.name')
-                    ->hidden(function (Table $table) {
-                        if ($table->getGrouping() && $table->getGrouping()->getId() === 'category.name') {
-                            return true;
-                        }
-                    })
-                    ->label(__('common.category'))
-
-                    ->sortable(),
-                MarKetColumn::make('market.name')
-                    ->label(__('common.market')),
-                // ->hidden(function (Table $table) {
-                //     if ($table->getGrouping() &&  $table->getGrouping()->getId() === 'market.name') {
-                //         return true;
-                //     }
-                // }),
 
 
-
-                // Tables\Columns\TextColumn::make('market.name')
-                //     ->label(__('common.market'))
-                //     ->hidden(function (Table $table) {
-                //         if ($table->getGrouping() &&  $table->getGrouping()->getId() === 'market.name') {
-                //             return true;
-                //         }
-                //     })
-
-                //     ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label(__('common.image'))
-                    ->circular()
-
-                    ->size(50),
-
-                Tables\Columns\ToggleColumn::make('active')
-                    ->label(__('common.active')),
-                Tables\Columns\TextColumn::make('brand')
-                    ->label(__('common.brand'))
-                    ->sortable()
-                    ->searchable(),
-
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 //filtro para favoritos
@@ -248,7 +350,7 @@ class ProductResource extends Resource
                 Tables\Actions\DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
-            ])
+            ])->actionsAlignment('right')->actionsPosition(ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

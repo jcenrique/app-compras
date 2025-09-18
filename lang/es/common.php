@@ -83,6 +83,8 @@ return [
     'product_created' => 'Producto creado correctamente.',
     'is_favorite' => 'Favorito',
     'show_favorites' => 'Mostrar favoritos',
+    'inactive' => 'Inactivo',
+    'update_price' => 'Actualizar Productos',
 
       /*|--------------------------------------------------------------------------
     | Client Resource

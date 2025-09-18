@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Favorite extends Model
 {
     //modelo de los productos favoritos por cliente
+
+
     protected $fillable = [
         'client_id',
         'product_id',
@@ -18,14 +20,14 @@ class Favorite extends Model
         $this->save();
     }
     //relación con el modelo de cliente
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
-    }
+    // public function client()
+    // {
+    //     return $this->belongsTo(Client::class);
+    // }
 
-    //relación con el modelo de producto
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+    // //relación con el modelo de producto
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class);
+    // }
 }

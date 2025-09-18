@@ -219,16 +219,16 @@ class OrderItemsRelationManager extends RelationManager
                     ->label(__('common.basket'))
                     ->sortable(),
             ])
-            ->filters([
-
-            ])
+            ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make()->modalWidth('lg')
                     //añadir el producto a favorito si no esta
-                    ->action(function (array $data) {
+                    ->action(function (array $data, array $arguments, Tables\Actions\Action $action, Form $form) {
+
                         $product = Product::find($data['product_id']);
                         if ($product && !$product->favorites()->where('client_id', Auth::id())->exists()) {
-                            $product->favorites()->create(['client_id' => Auth::id(), 'product_id' => $product->id]);
+                            $product->favorites()->attach(['client_id' => Auth::id()]);
+                            
                         }
                         //guardar el producto en los productos del pedido
                         $order = $this->getOwnerRecord();
@@ -239,7 +239,13 @@ class OrderItemsRelationManager extends RelationManager
                                 'price' => $product->price,
                             ]);
                         }
+                        if ($arguments['another'] ?? false) {
+
+                            $form->fill();
+                            $action->halt();
+                        }
                     })
+                    
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

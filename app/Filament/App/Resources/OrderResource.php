@@ -116,7 +116,7 @@ class OrderResource extends Resource
                 default => null,
             })
             ->columns([
-                Split::make([
+               // Split::make([
                     Tables\Columns\TextColumn::make('status')
                         ->sortable()
                         ->action(
@@ -188,9 +188,9 @@ class OrderResource extends Resource
                         )
                         ->money('EUR'),
 
-            ])->from('md')
+            ])//->from('md')
 
-            ])
+          //  ])
 
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -278,11 +278,10 @@ class OrderResource extends Resource
 
 
                 ])->toolTip(__('Actions'))
-                    ->button()
-                    ->color('gray')
+                    
+                    ->color('danger')
                     ->hiddenLabel()
-                    ->label(__('Actions'))
-                    ->icon('fas-list'),
+                    ->label(__('Actions')),
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

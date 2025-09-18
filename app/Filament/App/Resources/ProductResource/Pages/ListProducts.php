@@ -3,8 +3,12 @@
 namespace App\Filament\App\Resources\ProductResource\Pages;
 
 use App\Filament\App\Resources\ProductResource;
+use App\Models\Favorite;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ListProducts extends ListRecords
 {
@@ -13,8 +17,26 @@ class ListProducts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->createAnother(false),
+            Actions\CreateAction::make()
+                ->using(function (array $data, string $model): Model {
+                  
+                    $record = $model::create($data);
+                    if ($data['is_favorite']) {
+                        $client_id = Auth::id();
 
+                      
+                        Favorite::create([
+                            'client_id' => $client_id,
+                            'product_id' => $record->id
+                        ]);
+                    }
+
+                    // action that needs to be done 
+                    return $record;
+                })
+                ->createAnother(false),
+
+            
             // crear una accion para actualizar el precio de los productos
             Actions\Action::make('update_price')
                 ->label(__('common.update_price'))
@@ -29,7 +51,14 @@ class ListProducts extends ListRecords
     //funcion para actualizar los precios de los productos de Mercadona
     public function updatePrice(): void
     {
-        // Lógica para actualizar los precios de los productos
+       Notification::make()
+        ->title('Actualizar precios y productos')
+        ->body('Función en proceso de desarrollo (solo disponible para Mercadona)')
+        ->color('danger')
+        ->icon('fab-connectdevelop')
+        ->iconColor('danger')
+        ->duration(0)
+        ->send();
 
     }
 

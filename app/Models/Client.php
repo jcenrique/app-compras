@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Testing\Fluent\Concerns\Has;
@@ -88,9 +89,9 @@ class Client extends Authenticatable implements FilamentUser,  MustVerifyEmail
     }
 
     //relacion con favoritos
-    public function favorites(): HasMany
+    public function favorites(): BelongsToMany
     {
-        return $this->hasMany(Favorite::class);
+        return $this->belognsToMany(Product::class);
     }
 
 }
