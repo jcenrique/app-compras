@@ -196,8 +196,28 @@ class ProductResource extends Resource
             ->deferLoading()
             ->paginated()
             ->defaultPaginationPageOption(25)
-            ->extremePaginationLinks()
+               ->defaultGroup('category.name')
             ->defaultSort('name', 'asc')
+            ->groups([
+                Group::make('category.name')
+                    ->titlePrefixedWithLabel(false)
+                    ->getDescriptionFromRecordUsing(function (Product $record) {
+                        if ($record->category->description) {
+                            return $record->category->description;
+                        }
+
+                        //return '';
+
+                    })
+                    ->label(__('common.category'))
+                    ->collapsible(),
+                Group::make('market.name')
+                    ->titlePrefixedWithLabel(false)
+                    ->label(__('common.market'))
+                    ->collapsible(),
+
+
+            ])
 
             ->columns([
                 Grid::make()

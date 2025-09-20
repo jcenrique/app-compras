@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Order;
+use Filament\Actions\Exports\ExportColumn;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
+
 
 class OrderItemsRelationManager extends RelationManager
 {
@@ -221,6 +223,7 @@ class OrderItemsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
+
                 Tables\Actions\CreateAction::make()->modalWidth('lg')
                     //añadir el producto a favorito si no esta
                     ->action(function (array $data, array $arguments, Tables\Actions\Action $action, Form $form) {
@@ -228,7 +231,6 @@ class OrderItemsRelationManager extends RelationManager
                         $product = Product::find($data['product_id']);
                         if ($product && !$product->favorites()->where('client_id', Auth::id())->exists()) {
                             $product->favorites()->attach(['client_id' => Auth::id()]);
-                            
                         }
                         //guardar el producto en los productos del pedido
                         $order = $this->getOwnerRecord();
@@ -244,8 +246,10 @@ class OrderItemsRelationManager extends RelationManager
                             $form->fill();
                             $action->halt();
                         }
-                    })
-                    
+                    }),
+
+               
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

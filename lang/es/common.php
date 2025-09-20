@@ -18,7 +18,7 @@ return [
     | Filament Resource
     |--------------------------------------------------------------------------
     */
-
+    'export_excel' => 'Exportar a Excel',
     /*|--------------------------------------------------------------------------
     | User Resource
     |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ return [
     'user_management_nav_group' => 'Gestión de Usuarios',
 
     'panel_avalaible_titles' => [
-        'title'=> 'Paneles disponibles',
+        'title' => 'Paneles disponibles',
         'description' => 'Seleccione el panel al que desea cambiar',
         'admin' => 'Panel de Administración',
         'app' => 'Panel de Aplicación',
@@ -86,11 +86,11 @@ return [
     'inactive' => 'Inactivo',
     'update_price' => 'Actualizar Productos',
 
-      /*|--------------------------------------------------------------------------
+    /*|--------------------------------------------------------------------------
     | Client Resource
     |--------------------------------------------------------------------------
     */
-    'clients_nav_group' =>'Gestión de Clientes',
+    'clients_nav_group' => 'Gestión de Clientes',
 
     'client_resource_label' => 'Cliente',
     'client_resource_plural_label' => 'Clientes',
@@ -99,7 +99,8 @@ return [
     'resend_verification_email' => 'Reenviar email de verificación',
     'verification_email_resent' => 'Email de verificación reenviado',
 
-        /*|--------------------------------------------------------------------------
+
+    /*|--------------------------------------------------------------------------
     | Section Resource
     |--------------------------------------------------------------------------
     */

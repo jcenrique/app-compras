@@ -16,6 +16,7 @@ return [
     | Filament Resource
     |--------------------------------------------------------------------------
     */
+    'export_excel' => 'Export to Excel',
 
     'panel_avalaible_titles' => [
         'title'=> 'Panels available',

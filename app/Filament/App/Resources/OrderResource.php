@@ -2,36 +2,37 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Enum\OrderStatus;
-use App\Filament\App\Resources\OrderResource\Pages;
-use App\Filament\App\Resources\OrderResource\Pages\EditOrder;
-use App\Filament\App\Resources\OrderResource\Pages\ShopOrder;
-use App\Filament\App\Resources\OrderResource\RelationManagers;
-use App\Models\Order;
 use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\ToggleButtons;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
-use Filament\Support\Enums\FontWeight;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Support\RawJs;
+
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Tables\Enums\ActionsPosition;
+use App\Models\Order;
+
+use Filament\Forms\Form;
+use App\Enum\OrderStatus;
+
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use Filament\Resources\Resource;
+use App\Exports\OrderItemsExport;
+
+use Filament\Tables\Actions\Action;
+use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
+
+use Filament\Forms\Components\Section;
+
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\ActionGroup;
+
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Forms\Components\ToggleButtons;
+use App\Filament\App\Resources\OrderResource\Pages;
+
+use App\Filament\App\Resources\OrderResource\RelationManagers;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderResource extends Resource
 {
@@ -139,7 +140,7 @@ class OrderResource extends Resource
                         ->label(__('common.order_status'))
                         ->badge(),
                     //   Stack::make([
-                    Tables\Columns\ImageColumn::make('market.logo'),
+                   
                     Tables\Columns\TextColumn::make('market.name')
                         ->label(__('common.market'))
                         ->badge()
@@ -152,6 +153,7 @@ class OrderResource extends Resource
 
                     Tables\Columns\TextColumn::make('order_date')
                         ->icon('heroicon-o-calendar')
+                         ->color('info')
                         ->label(__('common.order_date'))
                         ->badge()
                         ->dateTime('d/m/Y')
@@ -160,6 +162,7 @@ class OrderResource extends Resource
 
                     Tables\Columns\TextColumn::make('items_count')
                         ->badge()
+                         ->color('info')
                         ->label(__('common.items_count'))
                         ->icon('fas-cart-arrow-down')
                         // ->prefix(__('common.items_count_prefix'))
@@ -171,6 +174,7 @@ class OrderResource extends Resource
                     Tables\Columns\TextColumn::make('total_price')
                         ->label(__('common.total_price'))
                         ->icon('fas-coins')
+                         ->color('info')
                         ->money('EUR')
                         ->badge()
                         ->getStateUsing(
@@ -202,6 +206,7 @@ class OrderResource extends Resource
             ->actions([
 
                 ActionGroup::make([
+
                     Tables\Actions\Action::make('comprar')
                         ->hiddenLabel(true)
                         ->tooltip(__('common.comprar'))
@@ -274,7 +279,18 @@ class OrderResource extends Resource
                         ->requiresConfirmation()
                         ->modalHeading(__('common.copy_order'))
                         ->modalSubmitActionLabel(__('common.copy_order'))
-                        ->icon('heroicon-o-document-duplicate')
+                        ->icon('heroicon-o-document-duplicate'),
+                    
+                    Tables\Actions\Action::make('exportExcel')
+                        ->label(__('common.export_excel'))
+                        ->icon('fas-file-excel')
+                        ->color('info')
+                        ->action(function (Order $record) {
+                            $fecha = Carbon::createFromDate( $record->order_date)->format('Ymd');
+                            $client= $record->client()->first()->name;
+                           
+                            return Excel::download(new OrderItemsExport($record), $client . $fecha . '.xlsx');
+                        }),
 
 
                 ])->toolTip(__('Actions'))
@@ -283,6 +299,9 @@ class OrderResource extends Resource
                     ->hiddenLabel()
                     ->label(__('Actions')),
             ], position: ActionsPosition::BeforeColumns)
+            ->headerActions([
+              
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

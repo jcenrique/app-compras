@@ -13,6 +13,8 @@ return [
 
     'market_management_nav_group' => 'Gestion du marché',
 
+    'export_excel' => 'Exporter vers Excel',
+
     /*|--------------------------------------------------------------------------
     | User Resource
     |--------------------------------------------------------------------------

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SectionResource\Pages;
 use App\Filament\Resources\SectionResource\RelationManagers;
+use App\Filament\Resources\SectionResource\RelationManagers\CategoriesRelationManager;
 use App\Models\Section;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -63,7 +64,7 @@ class SectionResource extends Resource
 
                 Forms\Components\Textarea::make('description')
                     ->label(__('common.description'))
-                    ->required()
+                  
                     ->columnSpanFull(),
 
                 Forms\Components\FileUpload::make('image')
@@ -134,7 +135,7 @@ class SectionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CategoriesRelationManager::class
         ];
     }
 
@@ -143,7 +144,7 @@ class SectionResource extends Resource
         return [
             'index' => Pages\ListSections::route('/'),
             //'create' => Pages\CreateSection::route('/create'),
-           // 'edit' => Pages\EditSection::route('/{record}/edit'),
+           'edit' => Pages\EditSection::route('/{record}/edit'),
         ];
     }
 }

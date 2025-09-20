@@ -11,7 +11,12 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Grid;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -155,6 +160,7 @@ class ProductResource extends Resource
     {
         return $table
             ->defaultGroup('category.name')
+            ->defaultPaginationPageOption(25)
             ->defaultSort('name', 'asc')
             ->groups([
                 Group::make('category.name')
@@ -176,55 +182,105 @@ class ProductResource extends Resource
 
 
             ])
+
+
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label(__('common.name'))
-                    ->searchable(),
+                Grid::make()
+                    ->grow(true)
+                    ->columns(1)
+                    ->schema([
+                        Split::make([
+                            Grid::make()
+                                ->columns(1)
+                                ->schema([
+                                    Tables\Columns\ImageColumn::make('image')
+                                        ->alignment(Alignment::Center)
+                                        ->size(150),
+                                ])->grow(false),
 
-                Tables\Columns\TextColumn::make('price')
-                    ->label(__('common.price'))
-                    ->money('EUR')
-                    ->sortable(),
 
-                Tables\Columns\TextColumn::make('category.name')
-                    ->hidden(function (Table $table) {
-                        if ($table->getGrouping() && $table->getGrouping()->getId() === 'category.name') {
-                            return true;
-                        }
-                    })
-                    ->label(__('common.category'))
+                            Grid::make()
+                                ->columns(1)
+                                ->schema([
 
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('market.name')
-                    ->label(__('common.market'))
-                    ->hidden(function (Table $table) {
-                        if ($table->getGrouping() &&  $table->getGrouping()->getId() === 'market.name') {
-                            return true;
-                        }
-                    })
+                                    Tables\Columns\TextColumn::make('category.name')
+                                        ->color('gray')
+                                        ->prefix(__('common.category') . ': ')
+                                        ->hidden(function (Table $table) {
+                                            if ($table->getGrouping() && $table->getGrouping()->getId() === 'category.name') {
+                                                return true;
+                                            }
+                                        })
+                                        ->label(__('common.category'))
+                                        ->sortable(),
+                                    //columna para marcar favoritos
+                                    Split::make([
+                                        Tables\Columns\TextColumn::make('text1')
+                                            ->color('warning')
+                                            ->default(function ($record) {
+                                                return __('common.is_favorite');
+                                            }),
 
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label(__('common.image'))
-                    ->circular()
 
-                    ->size(50),
+                                    ]),
 
-                Tables\Columns\ToggleColumn::make('active')
-                    ->label(__('common.active')),
-                Tables\Columns\TextColumn::make('brand')
-                    ->label(__('common.brand'))
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
 
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                                    Grid::make()
+                                        ->columns(1)
+                                        ->schema([
+
+
+                                            Tables\Columns\TextColumn::make('name')
+                                                ->label(__('common.name'))
+                                                ->iconColor('danger')
+                                                ->icon('fas-tag')
+
+                                                ->weight(FontWeight::Bold)
+
+
+                                                ->sortable()
+                                                ->searchable(),
+
+                                            Tables\Columns\TextColumn::make('price')
+                                                ->label(__('common.price'))
+
+                                                ->size(TextColumnSize::Large)
+                                                ->money('EUR')
+                                                ->sortable(),
+                                            Split::make([
+                                                Tables\Columns\TextColumn::make('text')
+                                                    ->color('warning')
+                                                    ->default(function ($record) {
+                                                        return $record->active ? __('common.active') : __('common.inactive');
+                                                    }),
+                                                Tables\Columns\ToggleColumn::make('active')
+
+                                                    ->label(__('common.active')),
+
+
+                                            ]),
+
+
+                                            Tables\Columns\TextColumn::make('brand')
+                                                ->label(__('common.brand'))
+
+                                                ->sortable()
+                                                ->searchable(),
+
+                                        ])
+
+                                ]),
+
+
+                        ])
+                    ])
+
+
+            ])
+
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category_id')

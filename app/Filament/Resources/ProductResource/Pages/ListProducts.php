@@ -6,6 +6,7 @@ use App\Filament\Resources\ProductResource;
 use App\Models\Market;
 use App\Models\Product;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,7 +46,28 @@ class ListProducts extends ListRecords
                     }
 
                 })
-                ->createAnother(false)
+                ->createAnother(false),
+
+                 // crear una accion para actualizar el precio de los productos
+            Actions\Action::make('update_price')
+                ->label(__('common.update_price'))
+                ->action('updatePrice')
+                ->requiresConfirmation()
+                ->color('success'),
         ];
+    }
+
+    //funcion para actualizar los precios de los productos de Mercadona
+    public function updatePrice(): void
+    {
+       Notification::make()
+        ->title('Actualizar precios y productos')
+        ->body('Función en proceso de desarrollo (solo disponible para Mercadona)')
+        ->color('danger')
+        ->icon('fab-connectdevelop')
+        ->iconColor('danger')
+        ->duration(0)
+        ->send();
+
     }
 }

@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Filament\App\Resources\OrderResource\Pages;
-use App\Filament\App\Resources\OrderResource;
+namespace App\Filament\Resources\OrderResource\Pages;
+
+use App\Filament\Resources\OrderResource;
+
+use Filament\Resources\Pages\Page;
 use App\Enum\OrderStatus;
 
 use App\Models\Category;
@@ -23,7 +26,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
-use Filament\Resources\Pages\Page;
+
 
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action as ActionsAction;
@@ -39,8 +42,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
-
-class ShopOrder extends Page implements HasTable
+class ShopOrder extends  Page implements HasTable
 {
     protected static string $resource = OrderResource::class;
 

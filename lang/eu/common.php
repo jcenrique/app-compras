@@ -18,6 +18,8 @@ return [
     | Filament Resource
     |--------------------------------------------------------------------------
     */
+    'export_excel' => 'Esportatu Excelera',
+
     'panel_avalaible_titles' => [
         'title' => 'Eskuragarri dauden panelak',
         'description' => 'Aldatu nahi duzun panelaren hautaketa',
