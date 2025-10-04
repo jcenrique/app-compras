@@ -78,6 +78,7 @@ return [
     'show_favorites' => 'Show favorites',
     'inactive' => 'Idle',
     'update_price' => 'Update products',
+    'add_to_cart' => 'Add to cart',
 
           /*|--------------------------------------------------------------------------
     | Section Resource

@@ -12,7 +12,7 @@ class CreateOrder extends CreateRecord
 
 protected function mutateFormDataBeforeCreate(array $data): array
 {
-    $data['client_id'] = auth()->id();
+    $data['client_id'] = Auth::id();
 
     return $data;
 }

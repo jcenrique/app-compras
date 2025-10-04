@@ -85,6 +85,7 @@ return [
     'show_favorites' => 'Mostrar favoritos',
     'inactive' => 'Inactivo',
     'update_price' => 'Actualizar Productos',
+    'add_to_cart' => 'Añadir al carrito',
 
     /*|--------------------------------------------------------------------------
     | Client Resource

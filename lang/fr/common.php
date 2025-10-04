@@ -81,6 +81,7 @@ return [
     'show_favorites' => 'Afficher les favoris',
     'inactive' => 'Inactif',
     'update_price' => 'Mettre à jour les produits',
+    'add_to_cart' => 'Ajouter au panier',
 
 
 

@@ -80,6 +80,7 @@ return [
     'show_favorites' => 'Gogokoenak erakutsi',
     'inactive' => 'Inaktibo',
     'update_price' => 'Produktuak eguneratu',
+    'add_to_cart' => 'Gehitu saskira',
 
     /*|--------------------------------------------------------------------------
     | Section Resource
