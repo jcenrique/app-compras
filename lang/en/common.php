@@ -86,8 +86,12 @@ return [
     'show_favorites' => 'Show favorites',
     'inactive' => 'Idle',
     'update_price' => 'Update products',
+<<<<<<< HEAD
     'format' => 'Format',
     'Registro duplicado, no se puede crear' => 'Duplicate record, cannot be created',
+=======
+    'add_to_cart' => 'Add to cart',
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 
           /*|--------------------------------------------------------------------------
     | Section Resource

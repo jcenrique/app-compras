@@ -37,8 +37,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+<<<<<<< HEAD
         Table::configureUsing(fn(Table $table) => $table
             ->deferFilters(false));
+=======
+       // static::configureShieldAuthProvider();
+
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
         Filament::serving(function () {
             Filament::registerTheme(app(Vite::class)(['resources/css/app.css']));
         });
@@ -100,4 +105,16 @@ class AppServiceProvider extends ServiceProvider
                 ]);
         });
     }
+
+//     protected static function configureShieldAuthProvider(): void
+// {
+//     $models = [
+//         'client' => \App\Models\Client::class,
+//         'user' => \App\Models\User::class,
+//     ];
+
+//     config([
+//         'filament-shield.auth_provider_model' => $models[Filament::getCurrentPanel()->getId()] ?? \App\Models\User::class,
+//     ]);
+//}
 }

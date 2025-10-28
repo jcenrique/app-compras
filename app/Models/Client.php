@@ -28,9 +28,11 @@ class Client extends Authenticatable implements FilamentUser,  MustVerifyEmail
 
 
 
-    protected $guard_name = "client";
+   
     use HasFactory,Notifiable;
     use HasRoles;
+
+    protected $guard_name = "client";
 
     protected $fillable = [
         'name',

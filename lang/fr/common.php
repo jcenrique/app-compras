@@ -90,8 +90,12 @@ return [
     'show_favorites' => 'Afficher les favoris',
     'inactive' => 'Inactif',
     'update_price' => 'Mettre à jour les produits',
+<<<<<<< HEAD
     'format' => 'Format',
     'Registro duplicado, no se puede crear' => 'Enregistrement en double, ne peut pas être créé',
+=======
+    'add_to_cart' => 'Ajouter au panier',
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 
 
 

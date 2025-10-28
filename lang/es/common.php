@@ -94,8 +94,12 @@ return [
     'show_favorites' => 'Mostrar favoritos',
     'inactive' => 'Inactivo',
     'update_price' => 'Actualizar Productos',
+<<<<<<< HEAD
     'format' => 'Formato',
     'Registro duplicado, no se puede crear' => 'Registro duplicado, no se puede crear',
+=======
+    'add_to_cart' => 'Añadir al carrito',
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 
     /*|--------------------------------------------------------------------------
     | Client Resource

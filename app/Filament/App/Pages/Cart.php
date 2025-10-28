@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages;
 
+<<<<<<< HEAD
 use App\Enum\OrderStatus;
 use App\Models\Client;
 use App\Models\Order;
@@ -291,4 +292,17 @@ class Cart extends Page implements HasTable
                     ->visible(CartFacade::session(Auth::id())->getContent()->count() > 0),
             ]);
     }
+=======
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Filament\Pages\Page;
+
+class Cart extends Page
+{
+
+     use HasPageShield;
+     
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static string $view = 'filament.app.pages.cart';
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 }

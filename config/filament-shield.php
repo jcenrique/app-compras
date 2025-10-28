@@ -38,6 +38,7 @@ return [
 
     'tenant_model' => null,
 
+<<<<<<< HEAD
     /*
     |--------------------------------------------------------------------------
     | User Model
@@ -61,6 +62,9 @@ return [
     | or as a traditional role with all permissions explicitly assigned.
     |
     */
+=======
+   'auth_provider_model' => App\Models\User::class, 
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 
     'super_admin' => [
         'enabled' => true,
@@ -171,8 +175,14 @@ return [
                 'delete',
             ],
         ],
+<<<<<<< HEAD
         'exclude' => [
             //
+=======
+
+        'widgets' => [
+            'AccountWidget', 'FilamentInfoWidget',
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
         ],
     ],
 

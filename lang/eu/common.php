@@ -88,8 +88,12 @@ return [
     'show_favorites' => 'Gogokoenak erakutsi',
     'inactive' => 'Inaktibo',
     'update_price' => 'Produktuak eguneratu',
+<<<<<<< HEAD
     'format' => 'Formatua',
     'Registro duplicado, no se puede crear' => 'Erregistro bikoiztua, ezin da sortu',
+=======
+    'add_to_cart' => 'Gehitu saskira',
+>>>>>>> 6b1376f85b479673c4aa818bd317a135a66d9e7d
 
     /*|--------------------------------------------------------------------------
     | Section Resource
