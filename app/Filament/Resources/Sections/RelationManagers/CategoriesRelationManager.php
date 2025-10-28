@@ -1,9 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\SectionResource\RelationManagers;
+namespace App\Filament\Resources\Sections\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -22,22 +35,22 @@ class CategoriesRelationManager extends RelationManager
         return __('common.category_resource_plural_label');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-              Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+              TextInput::make('name')
                     ->label(__('common.name'))
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\Toggle::make('active')
+                Toggle::make('active')
                     ->label(__('common.active'))
                     ->default(true)
                     ->inline(false)
                     ->required(),
 
-                Forms\Components\Select::make('section_id')
+                Select::make('section_id')
                     ->label(__('common.section_resource_label'))
 
                     ->relationship(
@@ -50,12 +63,12 @@ class CategoriesRelationManager extends RelationManager
                     ->preload()
                     ,
 
-                Forms\Components\Textarea::make('description')
+                Textarea::make('description')
                     ->label(__('common.description'))
-                    
+
                     ->columnSpanFull(),
 
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->label(__('common.image'))
                     ->directory('images/categories')
                     ->imageEditor()
@@ -69,27 +82,27 @@ class CategoriesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    
+                TextColumn::make('name')
+
                     ->sortable()
                     ->label(__('common.name'))
                     ->searchable(),
 
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label(__('common.image'))
                     ->circular()
                     ->size(50),
 
-                Tables\Columns\ToggleColumn::make('active')
+                ToggleColumn::make('active')
                     ->label(__('common.active'))
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
@@ -99,15 +112,15 @@ class CategoriesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

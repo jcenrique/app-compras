@@ -1,49 +1,113 @@
 <?php
 
-namespace App\Filament\App\Resources\ProductResource\Pages;
+namespace App\Filament\App\Resources\Products\Pages;
 
-use App\Filament\App\Resources\ProductResource;
+use Filament\Actions\CreateAction;
+use App\Filament\App\Resources\Products\ProductResource;
 use App\Models\Favorite;
+use App\Models\Market;
+use App\Models\Product;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class ListProducts extends ListRecords
 {
     protected static string $resource = ProductResource::class;
+public ?string $activeTab = 'all';
+     public function getTabs(): array
+    {
+
+
+        return [
+            'all' => Tab::make()
+                ->label(__('common.all'))
+                ->icon('fas-check-double')
+                ->badge(Product::query()->count())
+                ->badgeColor('success'),
+
+
+            'favorites' => Tab::make()
+                ->label(Str::plural(__('common.is_favorite')))
+                ->icon('fas-heart')
+                ->modifyQueryUsing(fn(Builder $query) =>
+                            $query->whereHas('favorites', fn($q) => $q->where('client_id', Auth::id())))
+                ->badge(Product::query()->whereHas('favorites', fn($q) => $q->where('client_id', Auth::id()))->count())
+                ->badgeColor('info')
+               ,
+
+            'inactive' => Tab::make()
+                ->label(__('common.inactive'))
+                ->modifyQueryUsing(fn(Builder $query) =>
+                        $query->where('products.active', false))
+                ->icon('fas-eye-slash')
+                ->badge(Product::query()->where('active', false)->count())
+                ->badgeColor('danger'),
+        ];
+    }
+
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
+             ->before(function (Actions\CreateAction $action, array $data): void {
+
+                    // generate the slug
+                    $marker_name = Market::find($data['market_id'])->name ?? 'unknown';
+                      $slug = str($data['name'])->slug() . '-' . str($data['brand'])->slug() . '-' . str($marker_name)->slug();
+                    $existingProduct = Product::where('slug', $slug)->first();
+                    if ($existingProduct)   {
+                        // If a product with the same slug exists, prevent creation and notify the user
+
+                    Notification::make()
+                            ->title(__('common.Registro duplicado, no se puede crear'))
+                            ->danger()
+                            ->send();
+                       $action->halt();
+
+                    }
+                })
                 ->using(function (array $data, string $model): Model {
-                  
-                    $record = $model::create($data);
+
+                        $record = $model::create($data);
+
+
                     if ($data['is_favorite']) {
                         $client_id = Auth::id();
 
-                      
+
                         Favorite::create([
                             'client_id' => $client_id,
                             'product_id' => $record->id
                         ]);
                     }
 
-                    // action that needs to be done 
+                    // action that needs to be done
                     return $record;
                 })
+
                 ->createAnother(false),
 
-            
-           
+
+
 
 
         ];
     }
 
+    public function setPage($page, $pageName = 'page') :void
+    {
+        parent::setPage($page, $pageName);
 
+        $this->dispatch('scroll-to-top');
+    }
 
 
     // function ablancodev_get_categories()

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -14,7 +15,7 @@ class LatestUsers extends BaseWidget
         return $table
 
             ->query(
-                \App\Models\User::query()->latest()->take(1)
+                User::query()->latest()->take(1)
 
 
             )

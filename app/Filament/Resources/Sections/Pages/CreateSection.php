@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\SectionResource\Pages;
+namespace App\Filament\Resources\Sections\Pages;
 
-use App\Filament\Resources\SectionResource;
+use App\Filament\Resources\Sections\Sections\SectionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 

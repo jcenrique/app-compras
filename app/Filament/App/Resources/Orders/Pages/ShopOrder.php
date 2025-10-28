@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Filament\App\Resources\OrderResource\Pages;
-use App\Filament\App\Resources\OrderResource;
+namespace App\Filament\App\Resources\Orders\Pages;
+
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use App\Filament\App\Resources\Orders\OrderResource;
 use App\Enum\OrderStatus;
 
 use App\Models\Category;
@@ -10,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Tables\Columns\ProductImageColumn;
+use Asmit\ResizedColumn\HasResizableColumn;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 
@@ -18,16 +22,12 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action as ActionsAction;
-
+use Filament\Support\Enums\Width;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\Summarizers\Summarizer;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -35,18 +35,23 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
-
+use Filament\Resources\Components\Tab;
+use Filament\Resources\Concerns\HasTabs;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class ShopOrder extends Page implements HasTable
 {
+
+    use InteractsWithRecord;
+    use InteractsWithTable, HasTabs;
+
+    use HasResizableColumn;
+
     protected static string $resource = OrderResource::class;
 
-    protected static string $view = 'filament.app.resources.order-resource.pages.shop-order';
-    use InteractsWithRecord;
-    use InteractsWithTable;
+    protected string $view = 'filament.app.resources.order-resource.pages.shop-order';
 
     protected static bool $isLazy = false;
 
@@ -60,35 +65,10 @@ class ShopOrder extends Page implements HasTable
         return __('common.order_resource_label', ['order' => self::getRecord()->id]);
     }
 
-    protected function getFormSchema(): array
-    {
-        return [
-            // Fieldset::make(__('common.order_resource_label'))
-            //     ->schema([
-            //         Placeholder::make('market.name')
-            //             ->hiddenLabel()
-            //             ->extraAttributes(['style' => 'font-size:1.00em;padding:0;font-weight:bold;'])
-            //             ->content($this->record->market->name . ' (' . $this->record->order_date?->format('d/m/Y') . ')'),
-
-            //         Placeholder::make('Image')
-            //             ->hiddenLabel()
-            //             ->content(function (): HtmlString {
-            //                 return new HtmlString("<img width='100' height='100' src= '" . asset(  'storage/'. $this->record->market->logo) . "')>");
-            //             }),
-
-            //         Placeholder::make('status')
-            //             ->hiddenLabel()
-            //             ->content($this->record->status->getLabel())
-            //             ->extraAttributes(['class' => 'text-center bg-yellow-100 text-yellow-800 text-xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300' ])
-            //     ])
-            //     ->columns(3),
-
-        ];
-    }
-
 
     public    function table(Table $table): Table
     {
+
         return $table
             ->paginated(false)
             ->query(OrderItem::where('order_id', self::getRecord()->id))
@@ -101,6 +81,7 @@ class ShopOrder extends Page implements HasTable
                         return $record->is_basket ? __('common.is_basket') : __('common.order_statuses.pending');
                     })
             )
+
 
             ->columns([
                 ToggleColumn::make('is_basket')
@@ -136,13 +117,20 @@ class ShopOrder extends Page implements HasTable
 
                 TextColumn::make('quantity')
                     ->label(__('common.quantity'))
-                    ->tooltip(__('common.change_quantity_tooltip'))
+                    ->tooltip(function ($record) {
+                        if (!$record->is_basket) {
+                            return __('common.change_quantity_tooltip');
+                        }
+                        return null;
+                    })
+                    ->disabledClick(fn($record) => $record->is_basket)
+
                     ->action(
-                        ActionsAction::make('change_quantity')
+                        Action::make('change_quantity')
 
                             ->icon('heroicon-o-pencil')
                             ->label(__('common.change_quantity'))
-                            ->form(fn($record) => [
+                            ->schema(fn($record) => [
                                 TextInput::make('quantity')
                                     ->label(__('common.quantity'))
                                     ->default($record->quantity)
@@ -150,16 +138,16 @@ class ShopOrder extends Page implements HasTable
                                     ->required(),
 
                             ])
-                            ->modalWidth(MaxWidth::Medium)
+                            ->modalWidth(Width::Medium)
                             ->action(fn($record, array $data) => $record->update(['quantity' => $data['quantity']]))
                         //->visible(fn() => auth()->user()->can('edit_name'))
                     )
                     ->badge(),
 
-                 ProductImageColumn::make('producto')
+                ProductImageColumn::make('producto')
                     ->label(__('common.product'))
                     ->tooltip(fn($record) => $record->product->name),
-                    
+
                 // ImageColumn::make('product.image')
                 //     ->label(__('common.image'))
                 //     ->circular()
@@ -192,7 +180,8 @@ class ShopOrder extends Page implements HasTable
                     })
                     ->summarize(
                         Summarizer::make()
-                            ->prefix(new HtmlString('<strong class="danger">' .  __('common.total') . ': </strong>'))
+
+                            ->prefix(new HtmlString('<strong class="text-red-800">' .  __('common.total') . ': </strong>'))
 
                             ->using(function ($query) {
                                 $items = $query->get();
@@ -212,10 +201,13 @@ class ShopOrder extends Page implements HasTable
             ->filters([
                 //
             ])
-            ->actions([
-                // ...
+            ->recordActions([
+                DeleteAction::make()
+                    ->tooltip(__('Delete'))
+                    ->successRedirectUrl(ShopOrder::getUrl(['record' => self::getRecord()->id]))
+                    ->hiddenLabel(true),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 // ...
             ]);
     }
@@ -261,12 +253,12 @@ class ShopOrder extends Page implements HasTable
 
 
             Action::make(__('common.save_pending'))
-                ->form([
-                  DatePicker::make('new_order_date')
-                                        ->label(__('common.order_date'))
-                                        ->displayFormat('d/m/Y')
-                                        ->default(now())
-                                        ->required(),
+                ->schema([
+                    DatePicker::make('new_order_date')
+                        ->label(__('common.order_date'))
+                        ->displayFormat('d/m/Y')
+                        ->default(now())
+                        ->required(),
                 ])
                 ->color('warning')
                 ->disabled(fn() => $this->record->items->where('is_basket', false)->isEmpty())
@@ -315,7 +307,7 @@ class ShopOrder extends Page implements HasTable
                 ->hiddenLabel(true)
                 ->tooltip(__('common.add_to_basket'))
                 ->requiresConfirmation()
-                ->form([
+                ->schema([
                     Select::make('product_id')
                         ->label(__('common.product'))
                         ->searchable()
@@ -467,4 +459,5 @@ class ShopOrder extends Page implements HasTable
 
         ];
     }
+
 }

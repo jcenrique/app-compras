@@ -1,12 +1,22 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Markets\Markets;
 
-use App\Filament\Resources\MarketResource\Pages;
-use App\Filament\Resources\MarketResource\RelationManagers;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Markets\Pages\ListMarkets;
+
 use App\Models\Market;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +27,7 @@ class MarketResource extends Resource
 {
     protected static ?string $model = Market::class;
 
-    protected static ?string $navigationIcon = 'fas-building-un';
+    protected static string | \BackedEnum | null $navigationIcon = 'fas-building-un';
 
     protected static ?int $navigationSort = 21;
 
@@ -45,21 +55,21 @@ class MarketResource extends Resource
         return __('common.market_resource_plural_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('common.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('active')
+                Toggle::make('active')
                     ->label(__('common.active'))
                     ->default(true)
                     ->inline(false)
                     ->required(),
 
-                Forms\Components\FileUpload::make('logo')
+                FileUpload::make('logo')
                     ->label(__('common.logo'))
                     ->directory('images/logos')
                     ->imageEditor()
@@ -74,27 +84,27 @@ class MarketResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('common.name'))
                     ->width('65%')
                     ->sortable()
                     ->searchable(),
 
-                Tables\Columns\ImageColumn::make('logo')
-                    ->size(50)
+                ImageColumn::make('logo')
+
                     ->label(__('common.logo')),
 
 
-                Tables\Columns\ToggleColumn::make('active')
+                ToggleColumn::make('active')
                     ->sortable()
                     ->label(__('common.active')),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
@@ -103,17 +113,17 @@ class MarketResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
+            ->recordActions([
+                EditAction::make()
                     ->tooltip(__('Edit'))
                     ->hiddenLabel(true),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -128,7 +138,7 @@ class MarketResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMarkets::route('/'),
+            'index' => ListMarkets::route('/'),
             // 'create' => Pages\CreateMarket::route('/create'),
             //'edit' => Pages\EditMarket::route('/{record}/edit'),
         ];

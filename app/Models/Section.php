@@ -28,7 +28,8 @@ class Section extends Model  implements Auditable
         'slug',
         'description',
         'image',
-        'active'
+        'active',
+        'market_id'
     ];
 
      /**
@@ -49,5 +50,10 @@ class Section extends Model  implements Auditable
       public function scopeActive($query)
     {
         return $query->where('active', true);
+    }
+
+    public function market()
+    {
+        return $this->belongsTo(Market::class);
     }
 }

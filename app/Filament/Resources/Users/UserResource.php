@@ -1,14 +1,27 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Users;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\Action;
+use Filament\Auth\Notifications\VerifyEmail;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Pages\CreateUser;
+use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Notifications\Auth\VerifyEmail;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -16,13 +29,13 @@ use Filament\Tables\Table;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
+//use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
  protected static ?int $navigationSort = 11;
 
@@ -47,31 +60,31 @@ class UserResource extends Resource
         return __('common.user_resource_plural_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('common.name'))
 
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->label(__('common.email'))
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at')
+                DateTimePicker::make('email_verified_at')
                     ->label(__('common.email_verified_at'))
                     ->hiddenOn('edit'),
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
                     ->label(__('common.password'))
                     ->password()
                     ->required()
                     ->hiddenOn('edit')
                     ->maxLength(255),
 
-                Forms\Components\Select::make('roles')
+                Select::make('roles')
                     ->label(__('filament-shield::filament-shield.resource.label.roles'))
                     ->relationship('roles', 'name')
                     ->multiple()
@@ -84,23 +97,23 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('common.name'))
 
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label(__('common.email'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->label(__('common.email_verified_at'))
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
@@ -108,20 +121,20 @@ class UserResource extends Resource
             ])
             ->filters([
 
-                Tables\Filters\TernaryFilter::make('verified')
+                TernaryFilter::make('verified')
                     ->label('Verified email')
                     ->attribute('email_verified_at')
                     ->nullable(),
             ])
-            ->actions([
-                 Tables\Actions\EditAction::make()
+            ->recordActions([
+                 EditAction::make()
                     ->tooltip(__('Edit'))
                     ->hiddenLabel(true),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
 
-                Tables\Actions\Action::make('resend_verification_email')
+                Action::make('resend_verification_email')
                     ->tooltip((__('common.Resend Verification Email')))
                     ->hiddenLabel(true)
                     ->icon('heroicon-o-envelope')
@@ -139,9 +152,9 @@ class UserResource extends Resource
                     ->requiresConfirmation(),
 
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -149,16 +162,16 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            AuditsRelationManager::class,
+          //  AuditsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

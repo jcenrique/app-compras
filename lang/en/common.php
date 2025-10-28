@@ -10,6 +10,14 @@ return [
     'created_at' => 'Creation date',
     'updated_at' => 'Update date',
     'deleted_at' => 'Deletion date',
+    'all' => 'All',
+    'search' => 'Search',
+    'actions' => 'Actions',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'view' => 'View',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,6 +86,8 @@ return [
     'show_favorites' => 'Show favorites',
     'inactive' => 'Idle',
     'update_price' => 'Update products',
+    'format' => 'Format',
+    'Registro duplicado, no se puede crear' => 'Duplicate record, cannot be created',
 
           /*|--------------------------------------------------------------------------
     | Section Resource
@@ -159,4 +169,24 @@ return [
     'finalize_order_confirmation' => 'The order has been finalized',
     'order_finalized' => 'Order finalized successfully',
 
+
+
+    // Cart Page
+    'shopping_cart' => 'Shopping Cart',
+    'add_to_cart' => 'Add to Cart',
+    'items_in_cart' => 'Items in cart',
+    'clear_cart' => 'Clear Cart',
+    'cart_cleared' => 'Cart cleared successfully',
+    'order_now' => 'Order Now',
+    'order_placed_successfully' => 'Order placed successfully',
+    'cart' => 'Cart',
+    'cart_empty' => 'The cart is empty',
+    'item_removed_from_cart' => 'Item removed from cart',
+    'item_quantity_increased' => 'Item quantity increased',
+    'item_quantity_decreased' => 'Item quantity decreased',
+    'uncategorized' => 'Uncategorized',
+    'increase_quantity' => 'Increase quantity',
+    'decrease_quantity' => 'Decrease quantity',
+    'diferent_market_product' => 'Different supermarket product.',
+    'product_not_add_to_cart' => 'The product will not be added to the cart.'
 ];

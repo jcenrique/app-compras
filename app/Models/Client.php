@@ -75,7 +75,7 @@ class Client extends Authenticatable implements FilamentUser,  MustVerifyEmail
         return true;
     }
 
-    public function ordes(): HasMany
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }

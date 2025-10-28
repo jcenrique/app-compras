@@ -1,25 +1,39 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Orders\Orders;
+
+
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Tables\Enums\RecordActionsPosition;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 
 use App\Enum\OrderStatus;
 use App\Exports\OrderItemsExport;
+use App\Filament\App\Resources\Orders\Pages\ManageOrderItems;
+use App\Filament\App\Resources\Orders\Pages\ShopOrder;
 use App\Filament\Resources\OrderResource\Pages;
-
-use App\Filament\Resources\OrderResource\RelationManagers\ItemsRelationManager;
+use App\Filament\Resources\Orders\Orders\Pages\ManageOrderItemsAdmin;
+use App\Filament\Resources\Orders\Pages\EditOrder;
+use App\Filament\Resources\Orders\Pages\ListOrders;
+use App\Filament\Resources\Orders\RelationManagers\ItemsRelationManager;
 use App\Models\Client;
 use App\Models\Order;
 use Carbon\Carbon;
 use Filament\Forms;
 
 use Filament\Forms\Components\ToggleButtons;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -31,7 +45,7 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
 
     protected static bool $canCreateAnother = false;
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shopping-bag';
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadgeColor(): ?string
@@ -54,26 +68,26 @@ class OrderResource extends Resource
         return __('common.order_resource_plural_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('client_id')
+        return $schema
+            ->components([
+                Select::make('client_id')
                     ->label(__('common.client_resource_label'))
                     ->options(function () {
                         return Client::all()->pluck('name', 'id');
                     }),
 
-                Forms\Components\Select::make('market_id')
+                Select::make('market_id')
                     ->label(__('common.market'))
                     ->relationship('market', 'name')
                     ->required(),
-                Forms\Components\DatePicker::make('order_date')
+                DatePicker::make('order_date')
                     ->label(__('common.order_date'))
 
                     ->displayFormat('d/m/Y')
                     ->required(),
-                Forms\Components\ToggleButtons::make('status')
+                ToggleButtons::make('status')
                     ->label(__('common.order_status'))
                     ->options(OrderStatus::class)
                     ->default(OrderStatus::PENDING)
@@ -83,7 +97,7 @@ class OrderResource extends Resource
 
 
 
-                Forms\Components\Textarea::make('notes')
+                Textarea::make('notes')
                     ->label(__('common.notes'))
                     ->maxLength(500)
                     ->nullable()
@@ -111,13 +125,13 @@ class OrderResource extends Resource
             })
             ->columns([
                 // Split::make([
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->sortable()
                     ->action(
                         Action::make('change_status')
                             ->icon('heroicon-o-adjustments-horizontal')
                             ->label(__('common.change_status'))
-                            ->form(fn(Order $record) => [
+                            ->schema(fn(Order $record) => [
                                 ToggleButtons::make('status')
                                     ->label(__('common.order_status'))
                                     ->options(OrderStatus::class)
@@ -126,7 +140,7 @@ class OrderResource extends Resource
                                 //>grouped()
 
                             ])
-                            ->modalWidth(MaxWidth::Medium)
+                            ->modalWidth(Width::Medium)
                             ->action(fn(Order $record, array $data) => $record->update(['status' => $data['status']]))
 
                     )
@@ -134,12 +148,17 @@ class OrderResource extends Resource
                     ->badge(),
                 //   Stack::make([
 
-                Tables\Columns\TextColumn::make('client.name')
+                TextColumn::make('client.name')
                     ->label(__('common.name'))
                     ->searchable()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('market.name')
+                TextColumn::make('notes')
+                    ->label(__('common.notes'))
+                    ->searchable()
+                    ->sortable()
+                    ->wrap()
+                    ->extraAttributes(['class' => 'max-w-md']),
+                TextColumn::make('market.name')
                     ->label(__('common.market'))
                     ->badge()
                     ->color('success')
@@ -150,7 +169,7 @@ class OrderResource extends Resource
 
 
 
-                Tables\Columns\TextColumn::make('order_date')
+                TextColumn::make('order_date')
                     ->icon('heroicon-o-calendar')
                     ->label(__('common.order_date'))
                     ->badge()
@@ -159,7 +178,7 @@ class OrderResource extends Resource
                     ->sortable(),
 
 
-                Tables\Columns\TextColumn::make('items_count')
+                TextColumn::make('items_count')
                     ->badge()
                     ->label(__('common.items_count'))
                     ->icon('fas-cart-arrow-down')
@@ -170,7 +189,7 @@ class OrderResource extends Resource
 
 
 
-                Tables\Columns\TextColumn::make('total_price')
+                TextColumn::make('total_price')
                     ->label(__('common.total_price'))
                     ->icon('fas-coins')
                     ->color('info')
@@ -195,18 +214,18 @@ class OrderResource extends Resource
                 SelectFilter::make('client')
                     ->relationship('client', 'name')
             ])
-            ->actions([
+            ->recordActions([
                 ActionGroup::make([
-                    Tables\Actions\Action::make('comprar')
+                    Action::make('comprar')
                         ->hiddenLabel(true)
                         ->tooltip(__('common.comprar'))
                         ->icon('heroicon-o-eye')
-                        ->url(fn(Order $record): string => OrderResource::getUrl('shop', ['record' => $record]))
+                        ->url(fn(Order $record): string => OrderResource::getUrl('order-items', ['record' => $record]))
                         // ->openUrlInNewTab()
                         ->color('warning'),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\Action::make('exportExcel')
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    Action::make('exportExcel')
                         ->label(__('common.export_excel'))
                         ->icon('fas-file-excel')
                         ->color('info')
@@ -223,10 +242,10 @@ class OrderResource extends Resource
                     ->color('danger')
                     ->hiddenLabel()
                     ->label(__('Actions')),
-            ], position: ActionsPosition::BeforeColumns)
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ], position: RecordActionsPosition::BeforeColumns)
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
 
                 ]),
             ]);
@@ -242,10 +261,11 @@ class OrderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOrders::route('/'),
+            'index' => ListOrders::route('/'),
             // 'create' => Pages\CreateOrder::route('/create'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
-            'shop' => Pages\ShopOrder::route('/{record}/shop'),
+            'edit' => EditOrder::route('/{record}/edit'),
+          //  'shop' => ShopOrder::route('/{record}/shop'),
+            'order-items' => ManageOrderItemsAdmin::route('/{record}/items'),
         ];
     }
 }

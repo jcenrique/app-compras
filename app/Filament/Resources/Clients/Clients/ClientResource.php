@@ -1,13 +1,24 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Clients\Clients;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\Action;
+use Filament\Auth\Notifications\VerifyEmail;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Clients\Pages\ListClients;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Client;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Notifications\Auth\VerifyEmail;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,7 +30,7 @@ class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
 
  protected static ?int $navigationSort = 31;
 
@@ -44,26 +55,31 @@ class ClientResource extends Resource
         return __('common.client_resource_plural_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('common.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->label(__('common.email'))
                     ->email()
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\Toggle::make('active')
+                Toggle::make('active')
                     ->inline(false),
 
-              
+              Select::make('roles')
+                    ->label(__('filament-shield::filament-shield.resource.label.roles'))
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
 
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
                     ->password()
                     ->hiddenOn('edit')
                     ->required()
@@ -77,29 +93,29 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('common.name'))
 
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label(__('common.email'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->label(__('common.email_verified_at'))
                     ->dateTime()
                     ->sortable(),
 
 
-               Tables\Columns\ToggleColumn::make('active')
+               ToggleColumn::make('active')
                     ->label(__('common.active'))
                     ->sortable()
                     ,
-               Tables\Columns\TextColumn::make('created_at')
+               TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
@@ -108,14 +124,14 @@ class ClientResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                 Tables\Actions\EditAction::make()
+            ->recordActions([
+                 EditAction::make()
                     ->tooltip(__('Edit'))
                     ->hiddenLabel(true),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
-                    Tables\Actions\Action::make(__('common.resend_verification_email'))
+                    Action::make(__('common.resend_verification_email'))
                     ->tooltip(__('common.resend_verification_email'))
                     ->hiddenLabel(true)
                     ->icon('heroicon-o-envelope')
@@ -133,9 +149,9 @@ class ClientResource extends Resource
                     })
                     ->requiresConfirmation(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -150,7 +166,7 @@ class ClientResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClients::route('/'),
+            'index' => ListClients::route('/'),
             //'create' => Pages\CreateClient::route('/create'),
            // 'edit' => Pages\EditClient::route('/{record}/edit'),
         ];

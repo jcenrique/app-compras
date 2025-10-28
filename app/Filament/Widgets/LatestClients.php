@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Client;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -13,7 +14,7 @@ class LatestClients extends BaseWidget
     {
         return $table
             ->query(
-                \App\Models\Client::query()->latest()->take(1)
+                Client::query()->latest()->take(1)
             )
             ->columns([
                 TextColumn::make('name')

@@ -22,9 +22,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class OrderItemsExport implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithStyles, WithColumnWidths ,WithEvents
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-
     protected $order;
 
     public function __construct(Order $order)

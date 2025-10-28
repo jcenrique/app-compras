@@ -47,4 +47,9 @@ class Market extends Model implements Auditable
     {
         return $query->where('active', true);
     }
+
+     public function sections()
+    {
+        return $this->hasMany(Section::class);
+    }
 }

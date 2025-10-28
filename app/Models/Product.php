@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\ProductObserver;
+use App\Traits\OrdenPorCategoriaYNombre;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,7 @@ use \OwenIt\Auditing\Auditable as AuditingTrait;
 class Product extends Model implements Auditable
 {
     use HasFactory, AuditingTrait;
+    use OrdenPorCategoriaYNombre;
 
     protected $fillable = [
         'name',
@@ -40,6 +42,8 @@ class Product extends Model implements Auditable
         'image',
         'active',
         'brand',
+        'format',
+        'market_product_id'
     ];
 
     protected $casts = [
@@ -77,10 +81,11 @@ class Product extends Model implements Auditable
         return $this->hasMany(OrderItem::class);
     }
 
-   //crear relacion para marcar el producto como favorito
-   public function favorites(): BelongsToMany
-   {
-       return $this->belongsToMany(Client::class,'favorites')->withPivot('client_id');
-   }
+    //crear relacion para marcar el producto como favorito
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Client::class, 'favorites')->withPivot('client_id');
+    }
+
 
 }

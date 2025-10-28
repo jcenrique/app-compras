@@ -10,6 +10,15 @@ return [
     'created_at' => 'Date de création',
     'updated_at' => 'Date de mise à jour',
     'deleted_at' => 'Date de suppression',
+    'all' => 'Tous',
+    'search' => 'Rechercher',
+    'actions' => 'Actions',
+    'save' => 'Enregistrer',
+    'cancel' => 'Annuler',
+    'edit' => 'Modifier',
+    'delete' => 'Supprimer',
+    'view' => 'Voir',
+
 
     'market_management_nav_group' => 'Gestion du marché',
 
@@ -81,6 +90,8 @@ return [
     'show_favorites' => 'Afficher les favoris',
     'inactive' => 'Inactif',
     'update_price' => 'Mettre à jour les produits',
+    'format' => 'Format',
+    'Registro duplicado, no se puede crear' => 'Enregistrement en double, ne peut pas être créé',
 
 
 
@@ -166,4 +177,24 @@ return [
     'all_items_in_basket' => 'Tous les articles sont dans le chariot',
     'finalize_order_confirmation' => 'La commande a été finalisée',
     'order_finalized' => 'Commande finalisée avec succès',
+
+     // Cart Page
+    'shopping_cart' => 'Chariot d\'achat',
+    'add_to_cart' => 'Ajouter au panier',
+    'items_in_cart' => 'Articles dans le panier',
+    'clear_cart' => 'Vider le panier',
+    'cart_cleared' => 'Le panier a été vidé avec succès',
+    'order_now' => 'Commander maintenant',
+    'order_placed_successfully' => 'Commande passée avec succès',
+    'cart' => 'Panier',
+    'cart_empty' => 'Le panier est vide',
+      'item_removed_from_cart' => 'Article retiré du panier',
+    'item_quantity_increased' => 'Quantité de l\'article augmentée',
+    'item_quantity_decreased' => 'Quantité de l\'article diminuée',
+
+      'uncategorized' => 'Non catégorisé',
+    'increase_quantity' => 'Augmenter la quantité',
+    'decrease_quantity' => 'Diminuer la quantité',
+    'diferent_market_product' => 'Produit de supermarché différent.',
+    'product_not_add_to_cart' => 'Le produit ne sera pas ajouté au panier.'
 ];

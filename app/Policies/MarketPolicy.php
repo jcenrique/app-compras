@@ -1,108 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
-use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Market;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MarketPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny( $user): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->can('view_any_market');
+        return $authUser->can('ViewAny:Market');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view( $user, Market $market): bool
+    public function view(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('view_market');
+        return $authUser->can('View:Market');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create( $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->can('create_market');
+        return $authUser->can('Create:Market');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update( $user, Market $market): bool
+    public function update(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('update_market');
+        return $authUser->can('Update:Market');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete( $user, Market $market): bool
+    public function delete(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('delete_market');
+        return $authUser->can('Delete:Market');
     }
 
-    /**
-     * Determine whether the user can bulk delete.
-     */
-    public function deleteAny( $user): bool
+    public function restore(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('delete_any_market');
+        return $authUser->can('Restore:Market');
     }
 
-    /**
-     * Determine whether the user can permanently delete.
-     */
-    public function forceDelete( $user, Market $market): bool
+    public function forceDelete(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('force_delete_market');
+        return $authUser->can('ForceDelete:Market');
     }
 
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny( $user): bool
+    public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $user->can('force_delete_any_market');
+        return $authUser->can('ForceDeleteAny:Market');
     }
 
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore( $user, Market $market): bool
+    public function restoreAny(AuthUser $authUser): bool
     {
-        return $user->can('restore_market');
+        return $authUser->can('RestoreAny:Market');
     }
 
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
+    public function replicate(AuthUser $authUser, Market $market): bool
     {
-        return $user->can('restore_any_market');
+        return $authUser->can('Replicate:Market');
     }
 
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate( $user, Market $market): bool
+    public function reorder(AuthUser $authUser): bool
     {
-        return $user->can('replicate_market');
+        return $authUser->can('Reorder:Market');
     }
 
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder( $user): bool
-    {
-        return $user->can('reorder_market');
-    }
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use Database\Factories\UserFactory;
 use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -18,7 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements Auditable , FilamentUser ,  MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
      use HasRoles;
       use \OwenIt\Auditing\Auditable;

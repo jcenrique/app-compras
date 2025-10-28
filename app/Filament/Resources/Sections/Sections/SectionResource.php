@@ -1,16 +1,31 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Sections\Sections;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Sections\Pages\ListSections;
+use App\Filament\Resources\Sections\Pages\EditSection;
 use App\Filament\Resources\SectionResource\Pages;
 use App\Filament\Resources\SectionResource\RelationManagers;
-use App\Filament\Resources\SectionResource\RelationManagers\CategoriesRelationManager;
+use App\Filament\Resources\Sections\RelationManagers\CategoriesRelationManager;
 use App\Models\Section;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,7 +34,7 @@ class SectionResource extends Resource
 {
     protected static ?string $model = Section::class;
 
-   protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
+   protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-inbox-stack';
 
     protected static ?int $navigationSort = 22;
 
@@ -47,27 +62,32 @@ class SectionResource extends Resource
         return __('common.section_resource_plural_label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                 Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                 TextInput::make('name')
                     ->label(__('common.name'))
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\Toggle::make('active')
+                Toggle::make('active')
                     ->label(__('common.active'))
                     ->default(true)
                     ->inline(false)
                     ->required(),
 
-                Forms\Components\Textarea::make('description')
+                Select::make('market_id')
+                    ->label(__('common.market'))
+                    ->relationship('market', 'name')
+                    ->required(),
+
+                Textarea::make('description')
                     ->label(__('common.description'))
-                  
+
                     ->columnSpanFull(),
 
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->label(__('common.image'))
                     ->directory('images/sections')
                     ->imageEditor()
@@ -81,7 +101,7 @@ class SectionResource extends Resource
     {
         return $table
             ->columns([
-                 Tables\Columns\TextColumn::make('name')
+                 TextColumn::make('name')
                     ->description(function(Section $record){
                         return $record->description;
                     })
@@ -89,23 +109,28 @@ class SectionResource extends Resource
                     ->label(__('common.name'))
                     ->searchable(),
 
-                Tables\Columns\ImageColumn::make('image')
+                TextColumn::make('market.name')
+                    ->label(__('common.market'))
+                    ->searchable()
+                    ->sortable(),
+
+                ImageColumn::make('image')
                     ->label(__('common.image'))
                     ->circular()
                     ->size(50)
                     ,
 
-                Tables\Columns\ToggleColumn::make('active')
+                ToggleColumn::make('active')
                     ->label(__('common.active'))
                     ->sortable()
                     ,
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
@@ -114,20 +139,25 @@ class SectionResource extends Resource
             ->filters([
                 Filter::make('active')
                     ->label(__('common.active'))
-                    ->query(fn (Builder $query): Builder => $query->where('active', true))
+                    ->query(fn (Builder $query): Builder => $query->where('sections.active', true))
                     ->default(),
+                 SelectFilter::make('market_id')
+                    ->label(__('common.market'))
+                    ->relationship('market', 'name')
+                    ->searchable()
+                    ->preload(),
             ])
-            ->actions([
-                  Tables\Actions\EditAction::make()
+            ->recordActions([
+                  EditAction::make()
                     ->tooltip(__('Edit'))
                     ->hiddenLabel(true),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -142,9 +172,9 @@ class SectionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSections::route('/'),
+            'index' => ListSections::route('/'),
             //'create' => Pages\CreateSection::route('/create'),
-           'edit' => Pages\EditSection::route('/{record}/edit'),
+           'edit' => EditSection::route('/{record}/edit'),
         ];
     }
 }

@@ -30,6 +30,7 @@ class Category extends Model implements Auditable
         'slug',
         'image',
         'active',
+        'section_id'
     ];
 
     /**
@@ -59,5 +60,14 @@ class Category extends Model implements Auditable
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+    public function scopeOrdenadoPorName($query)
+    {
+        return $query->orderBy('name');
+    }
+    public function getNameAttribute($value)
+    {
+        return ucfirst(trim($value));
     }
 }

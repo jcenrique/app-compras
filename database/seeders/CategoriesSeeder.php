@@ -25,9 +25,7 @@ class CategoriesSeeder extends Seeder
 
         $folder = 'images';
 
-        if (Storage::disk('public')->exists($folder . '/products')) {
-            Storage::disk('public')->deleteDirectory($folder . '/products');
-        }
+       
 
         if (!Storage::disk('public')->exists($folder)) {
 
@@ -57,18 +55,28 @@ class CategoriesSeeder extends Seeder
             ]);
         }
 
+         
+        //Borrar imagenes productos mercadona
+        $products = Product::where('market_id',$this->market_id)->get();
+        foreach ($products as $product) {
+             Storage::disk('public')->delete($product->image);
+        }
+
+        //eliminar todos lo productos de mercadona
+         
+        Product::where('market_id', $this->market_id)->delete();
+
+        // eliminar todas las categorias y secciones existentes de mercadona
+        
+        Section::where('market_id', $this->market_id)->delete();
 
 
 
-        // eliminar todas las categorias y secciones existentes
-        Category::where('id', '!=', null)->delete();
-        Section::where('id', '!=', null)->delete();
         $this->ablancodev_get_categories();
     }
 
     function ablancodev_get_categories()
     {
-
 
         //   DB::table('sections')->truncate();
 
@@ -114,6 +122,7 @@ class CategoriesSeeder extends Seeder
     function ablancodev_get_category($category_id, Category $category_create)
     {
 
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://tienda.mercadona.es/api/categories/' . $category_id);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -141,7 +150,49 @@ class CategoriesSeeder extends Seeder
 
                             // crear producto
                             //product name
-                            $productName = $productDetails->display_name . ' - ' .  $productDetails->price_instructions->unit_size . ' ' . $productDetails->price_instructions->size_format;
+                            $divisor = 1;
+                                $peso = "kg";
+                                if ($productDetails->price_instructions->unit_size < 1) {
+                                    $divisor = 1000;
+                                    $peso = "g";
+
+                                }
+                                if($productDetails->price_instructions->size_format == "kg"){
+                                    $productName = $productDetails->display_name . ' - ' .  $productDetails->price_instructions->unit_size * $divisor . ' ' . $peso;
+                                }else{
+                                    $productName = $productDetails->display_name . ' - ' .  $productDetails->price_instructions->unit_size . ' ' . $productDetails->price_instructions->size_format;
+                                }
+
+                            // product is package
+                            $productFormat= null;
+                            if ($productDetails->price_instructions->is_pack) {
+                                // calcular el formato en funcion del pack size y total units
+                                $divisor = 1;
+                                $peso = "kg";
+                                if ($productDetails->price_instructions->pack_size < 1) {
+                                    $divisor = 1000;
+                                    $peso = "g";
+                                }
+                                 if($productDetails->price_instructions->size_format == "kg"){
+                                   $productFormat= ' ('. $productDetails->price_instructions->total_units . ' '
+                                                    . $productDetails->price_instructions->unit_name . ' x '
+                                                    . $productDetails->price_instructions->pack_size * $divisor .  ' '
+                                                    . $peso .')';
+                                  }else if($productDetails->price_instructions->size_format == "l"){
+                                    $peso ='l';
+                                   $productFormat= ' ('. $productDetails->price_instructions->total_units . ' '
+                                                    . $productDetails->price_instructions->unit_name . ' x '
+                                                    . $productDetails->price_instructions->pack_size  .  ' '
+                                                    . $peso .')';
+                                }else{
+                                    $productFormat= ' ('. $productDetails->price_instructions->total_units . ' '
+                                                    . $productDetails->price_instructions->unit_name . ' x '
+                                                    . $productDetails->price_instructions->pack_size * $divisor .  ' '
+                                                    . $productDetails->price_instructions->size_format .')';
+                                }
+
+
+                            }
 
                             $description = '<div>' .
                                 $productDetails->details->description . "\n" .
@@ -177,12 +228,15 @@ class CategoriesSeeder extends Seeder
                                     'category_id' => $category_create->id,
                                     'price' => $productDetails->price_instructions->unit_price,
                                     'slug' => $productDetails->slug . '_' . $productDetails->id,
+                                    'format' => isset($productFormat) ? $productFormat : null,
                                     'description' => $description,
                                     'image' => $fileimage,
-                                    'market_id' => $this->market_id
+                                    'market_id' => $this->market_id,
+                                    'market_product_id' => $productDetails->id,
+                                    'active' => true,
 
                                 ]);
-                                echo '       ' . $productName . "\n";
+                                echo '       ' . $productDetails->id . ' -> ' . $productName . '  -> ' . $productFormat . "\n";
                             }
                         }
 

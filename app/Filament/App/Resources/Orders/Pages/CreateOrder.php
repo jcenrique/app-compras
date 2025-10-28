@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Filament\App\Resources\OrderResource\Pages;
+namespace App\Filament\App\Resources\Orders\Pages;
 
-use App\Filament\App\Resources\OrderResource;
+use App\Filament\App\Resources\Orders\OrderResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateOrder extends CreateRecord
 {
@@ -12,7 +13,7 @@ class CreateOrder extends CreateRecord
 
 protected function mutateFormDataBeforeCreate(array $data): array
 {
-    $data['client_id'] = auth()->id();
+    $data['client_id'] = Auth::id();
 
     return $data;
 }

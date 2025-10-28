@@ -2,16 +2,27 @@
 
 namespace App\Providers;
 
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use Filament\Support\View\Components\ModalComponent;
+
 use BezhanSalleh\PanelSwitch\PanelSwitch;
-use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
+
 use Illuminate\Support\ServiceProvider;
-use App\Http\Responses\RegisterResponse;
+
+use BezhanSalleh\LanguageSwitch\Enums\Placement;
+use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
-use Filament\Support\View\Components\Modal;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\FileUpload;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Table;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\HtmlString;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,16 +36,33 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Table::configureUsing(fn(Table $table) => $table
+            ->deferFilters(false));
         Filament::serving(function () {
             Filament::registerTheme(app(Vite::class)(['resources/css/app.css']));
         });
+        FilamentColor::register([
+            'fuchsia' => Color::Fuchsia,
+        ]);
+        FileUpload::configureUsing(fn(FileUpload $fileUpload) => $fileUpload
+            ->visibility('public'));
+
+        ImageColumn::configureUsing(fn(ImageColumn $imageColumn) => $imageColumn
+            ->visibility('public'));
+
+        ImageEntry::configureUsing(fn(ImageEntry $imageEntry) => $imageEntry
+            ->visibility('public'));
         TextInput::configureUsing(function (TextInput $input) {
             $input->mutateDehydratedStateUsing(function ($state) {
                 return Str::trim($state);
             });
         });
-        Modal::closedByClickingAway(false);
-        Modal::closedByEscaping(false);
+     
+
+
+        ModalComponent::closedByClickingAway(false);
+        ModalComponent::closedByEscaping(false);
         PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
             $panelSwitch
                 ->modalHeading(__('common.panel_avalaible_titles.title'))
@@ -59,9 +87,10 @@ class AppServiceProvider extends ServiceProvider
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $defaultLocale = config('app.locale', 'es'); // Obtiene el idioma por defecto
             $switch
+                ->outsidePanelPlacement(Placement::BottomRight)
                 ->locales(['es', 'fr', 'en', 'eu'])
                 ->circular()
-                
+
                 ->flags([
                     'es' => asset('flags/es.svg'),
                     'fr' => asset('flags/fr.svg'),

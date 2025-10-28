@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Filament\App\Resources\MarketResource\Pages;
+namespace App\Filament\App\Resources\Markets\Pages;
 
-use App\Filament\App\Resources\MarketResource;
-use Filament\Actions;
+use App\Filament\App\Resources\Markets\MarketResource;
+use Filament\Actions\DeleteAction;
+
+
 use Filament\Resources\Pages\EditRecord;
 
 class EditMarket extends EditRecord
@@ -13,7 +15,7 @@ class EditMarket extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

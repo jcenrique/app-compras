@@ -1,18 +1,31 @@
 <?php
 
-namespace App\Filament\App\Resources\OrderResource\RelationManagers;
+namespace App\Filament\App\Resources\Orders\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Order;
+use Asmit\ResizedColumn\HasResizableColumn;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\Summarizers\Summarizer;
@@ -20,34 +33,34 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 
 
 class OrderItemsRelationManager extends RelationManager
 {
+   use HasResizableColumn;
     protected static string $relationship = 'items';
 
 
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             // ->columns([
             //     'sm' => 1,
             //     'xl' => 2,
             //     '2xl' => 4,
             // ])
 
-            ->schema([
+            ->components([
                 //Opcion para marcar si queremos todos los productos o solo los favoritos con un toggle
-                Forms\Components\Toggle::make('show_favorites')
+                Toggle::make('show_favorites')
                     ->label(__('common.show_favorites'))
                     ->default(true)
                     ->inline(false)
                     ->columnSpan(2),
 
-                Forms\Components\Select::make('product_id')
+                Select::make('product_id')
                     ->columnSpan(2)
 
                     ->label(__('common.product'))
@@ -58,7 +71,7 @@ class OrderItemsRelationManager extends RelationManager
 
                             // Limitar resultados y seleccionar solo los campos necesarios para mejorar el rendimiento
                             $query = Product::query()
-                                ->select(['id', 'name'])
+                                ->select(['id', 'name', 'format'])
                                 ->where('market_id', $market_id)
                                 ->when(
                                     $get('show_favorites'),
@@ -71,7 +84,11 @@ class OrderItemsRelationManager extends RelationManager
                                 ->active()
                                 ->limit(20); // Limitar el número de resultados
 
-                            return $query->pluck('name', 'id');
+                            return $query->get()->mapWithKeys(function ($product) {
+                                return [
+                                    $product->id => "{$product->name} - {$product->format}",
+                                ];
+                            })->toArray();
                         }
                     )
                     ->options(function (Get $get) {
@@ -100,7 +117,10 @@ class OrderItemsRelationManager extends RelationManager
                                 continue;
                             }
                             $options[$categoryName] = $productsInCategory->mapWithKeys(function ($product) {
-                                return [$product->id => $product->name];
+                                $options = $product->format ? $product->name .  $product->format  : $product->name;
+
+
+                                return [$product->id => $options];
                             })->toArray();
                         }
 
@@ -123,19 +143,19 @@ class OrderItemsRelationManager extends RelationManager
                     ->searchable()
                     ->required(),
 
-                Forms\Components\TextInput::make('quantity')
+                TextInput::make('quantity')
                     ->label(__('common.quantity'))
                     ->default(1)
-                    ->maxWidth(MaxWidth::Small)
+                    // ->maxWidth(Width::Small)
                     ->numeric()
-                    ->columnSpan(2)
+                    // ->columnSpan(2)
                     ->required(),
-                Forms\Components\TextInput::make('price')
+                TextInput::make('price')
                     ->label(__('common.price'))
                     ->readonly()
                     ->prefix('€')
-                    ->columnSpan(2)
-                    ->maxWidth(MaxWidth::Small)
+                    //->columnSpan(2)
+                    //   ->maxWidth(Width::Small)
                     ->numeric()
                     ->required(),
 
@@ -152,23 +172,16 @@ class OrderItemsRelationManager extends RelationManager
             ->defaultPaginationPageOption('all')
             ->heading(__('common.order_items_plural_label'))
             ->columns([
-                Tables\Columns\TextColumn::make('product.name')
+                TextColumn::make('product.name')
                     ->label(__('common.product'))
-                    // ->formatStateUsing(function ($record): HtmlString {
-                    //     // Return only the first <div> from the product description
-                    //     if (preg_match('/<div[^>]*>.*?<\/div>/is', $record->product->description, $matches)) {
-                    //         return new HtmlString($matches[0]);
-                    //     }
-                    //     return $record->product->name;
-
-                    // })
+                    ->description(fn($record) => $record->product->format ? __('common.format') . ': ' . $record->product->format : null)
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('product.image')
+                ImageColumn::make('product.image')
                     ->label(__('common.image'))
                     ->circular()
 
                     ->size(50),
-                Tables\Columns\TextColumn::make('quantity')
+                TextColumn::make('quantity')
                     ->label(__('common.quantity'))
                     ->tooltip(__('common.change_quantity_tooltip'))
                     ->action(
@@ -176,25 +189,25 @@ class OrderItemsRelationManager extends RelationManager
 
                             ->icon('heroicon-o-pencil')
                             ->label(__('common.change_quantity'))
-                            ->form(fn($record) => [
-                                Forms\Components\TextInput::make('quantity')
+                            ->schema(fn($record) => [
+                                TextInput::make('quantity')
                                     ->label(__('common.quantity'))
                                     ->default($record->quantity)
                                     ->numeric()
                                     ->required(),
 
                             ])
-                            ->modalWidth(MaxWidth::Medium)
+                            ->modalWidth(Width::Medium)
                             ->action(fn($record, array $data) => $record->update(['quantity' => $data['quantity']]))
                         //->visible(fn() => auth()->user()->can('edit_name'))
                     )
                     ->badge(),
 
-                Tables\Columns\TextColumn::make('price')
+                TextColumn::make('price')
                     ->label(__('common.price'))
                     ->money('EUR'),
 
-                Tables\Columns\TextColumn::make('total')
+                TextColumn::make('total')
 
                     ->label(__('common.subtotal'))
                     ->state(function (OrderItem $record): float {
@@ -202,7 +215,7 @@ class OrderItemsRelationManager extends RelationManager
                     })
                     ->summarize(
                         Summarizer::make()
-                            ->prefix(new HtmlString('<strong class="danger">' .  __('common.total') . ': </strong>'))
+                            ->prefix(new HtmlString('<strong class="text-red-800">' .  __('common.total') . ': </strong>'))
 
                             ->using(function ($query) {
                                 $items = $query->get();
@@ -216,7 +229,7 @@ class OrderItemsRelationManager extends RelationManager
                     )
                     ->money('EUR'),
 
-                Tables\Columns\IconColumn::make('is_basket')
+                IconColumn::make('is_basket')
                     ->boolean()
                     ->label(__('common.basket'))
                     ->sortable(),
@@ -224,9 +237,9 @@ class OrderItemsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
 
-                Tables\Actions\CreateAction::make()->modalWidth('lg')
+                CreateAction::make()->modalWidth('lg')
                     //añadir el producto a favorito si no esta
-                    ->action(function (array $data, array $arguments, Tables\Actions\Action $action, Form $form) {
+                    ->action(function (array $data, array $arguments, Action $action, Schema $schema) {
 
                         $product = Product::find($data['product_id']);
                         if ($product && !$product->favorites()->where('client_id', Auth::id())->exists()) {
@@ -243,25 +256,23 @@ class OrderItemsRelationManager extends RelationManager
                         }
                         if ($arguments['another'] ?? false) {
 
-                            $form->fill();
+                            $schema->fill();
                             $action->halt();
                         }
                     }),
 
-               
+
 
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->tooltip(__('Edit'))
-                    ->hiddenLabel(true),
-                Tables\Actions\DeleteAction::make()
+            ->recordActions([
+
+                DeleteAction::make()
                     ->tooltip(__('Delete'))
                     ->hiddenLabel(true),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
 
 

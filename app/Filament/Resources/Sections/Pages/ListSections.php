@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\SectionResource\Pages;
+namespace App\Filament\Resources\Sections\Pages;
 
-use App\Filament\Resources\SectionResource;
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\Sections\Sections\SectionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -13,7 +14,7 @@ class ListSections extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->createAnother(false),
+            CreateAction::make()->createAnother(false),
         ];
     }
 }

@@ -10,6 +10,15 @@ return [
     'created_at' => 'Fecha de creación',
     'updated_at' => 'Fecha de actualización',
     'deleted_at' => 'Fecha de eliminación',
+    'all' => 'Todos',
+    'search' => 'Buscar',
+    'actions' => 'Acciones',
+    'save' => 'Guardar',
+    'cancel' => 'Cancelar',
+    'edit' => 'Editar',
+    'delete' => 'Eliminar',
+    'view' => 'Ver',
+
 
     'market_management_nav_group' => 'Gestión del supermercado',
 
@@ -85,6 +94,8 @@ return [
     'show_favorites' => 'Mostrar favoritos',
     'inactive' => 'Inactivo',
     'update_price' => 'Actualizar Productos',
+    'format' => 'Formato',
+    'Registro duplicado, no se puede crear' => 'Registro duplicado, no se puede crear',
 
     /*|--------------------------------------------------------------------------
     | Client Resource
@@ -172,5 +183,22 @@ return [
     'finalize_order_confirmation' => 'El pedido se ha finalizado',
     'order_finalized' => 'Pedido finalizado correctamente',
 
-
+// Cart Page
+    'shopping_cart' => 'Carrito de Compras',
+    'add_to_cart' => 'Añadir al carrito',
+    'items_in_cart' => 'Productos en el carrito',
+    'clear_cart' => 'Vaciar carrito',
+    'cart_cleared' => 'Carrito vaciado correctamente',
+    'order_now' => 'Hacer pedido',
+    'order_placed_successfully' => 'Pedido realizado correctamente',
+    'cart' => 'Carrito',
+    'cart_empty' => 'El carrito está vacío',
+    'item_removed_from_cart' => 'Producto eliminado del carrito',
+    'item_quantity_increased' => 'Aumentada la cantidad del producto',
+    'item_quantity_decreased' => 'Disminuida la cantidad del producto',
+      'uncategorized' => 'Sin categoría',
+    'increase_quantity' => 'Aumentar cantidad',
+    'decrease_quantity' => 'Disminuir cantidad',
+    'diferent_market_product' => 'Producto de supermercado diferente.',
+    'product_not_add_to_cart' => 'El producto no se añadirá al carrito.'
 ];

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\MarketResource\Pages;
+namespace App\Filament\Resources\Markets\Pages;
 
-use App\Filament\Resources\MarketResource;
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\Markets\Markets\MarketResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -13,7 +14,7 @@ class ListMarkets extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->createAnother(false),
+            CreateAction::make()->createAnother(false),
         ];
     }
 }

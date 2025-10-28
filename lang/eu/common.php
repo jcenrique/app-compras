@@ -10,6 +10,14 @@ return [
     'created_at' => 'Sortu denbora',
     'updated_at' => 'Eguneratu denbora',
     'deleted_at' => 'Ezabatutako denbora',
+    'all' => 'Guztiak',
+    'search' => 'Bilatu',
+    'actions' => 'Ekintzak',
+    'save' => 'Gorde',
+    'cancel' => 'Utzi',
+    'edit' => 'Editatu',
+    'delete' => 'Ezabatu',
+    'view' => 'Ikusi',
 
     'market_management_nav_group' => 'Merkatuaren kudeaketa',
 
@@ -80,6 +88,8 @@ return [
     'show_favorites' => 'Gogokoenak erakutsi',
     'inactive' => 'Inaktibo',
     'update_price' => 'Produktuak eguneratu',
+    'format' => 'Formatua',
+    'Registro duplicado, no se puede crear' => 'Erregistro bikoiztua, ezin da sortu',
 
     /*|--------------------------------------------------------------------------
     | Section Resource
@@ -101,7 +111,7 @@ return [
     'resend_verification_email' => 'Berrespen-emaila berriro bidali',
     'verification_email_resent' => 'Berrespen-emaila berriro bidali da',
 
-     /*|--------------------------------------------------------------------------
+    /*|--------------------------------------------------------------------------
     | Order Resource
     |--------------------------------------------------------------------------
     */
@@ -165,4 +175,25 @@ return [
     'all_items_in_basket' => 'Produktu guztiak saskian daude',
     'finalize_order_confirmation' => 'Eskaria amaitu da',
     'order_finalized' => 'Eskaria ondo amaitu da',
+
+    // Cart Page
+    'shopping_cart' => 'Erosketa-gurditxoa',
+    'add_to_cart' => 'Gehitu gurditxora',
+    'items_in_cart' => 'Produktua gurditxoan',
+    'clear_cart' => 'Garbitu gurditxoa',
+    'cart_cleared' => 'Gurditxoa ondo garbitu da',
+    'order_now' => 'Eskaria egin orain',
+    'order_placed_successfully' => 'Eskaria ondo egin da',
+    'cart' => 'Gurditxoa',
+    'cart_empty' => 'Gurditxoa hutsik dago',
+
+    'item_removed_from_cart' => 'Produktua kendu da gurditxotik',
+    'item_quantity_increased' => 'Handitu da produktuen kantitatea',
+    'item_quantity_decreased' => 'Murriztu da produktuen kantitatea',
+
+      'uncategorized' => 'Kategoririk gabe',
+    'increase_quantity' => 'Handitu kantitatea',
+    'decrease_quantity' => 'Murriztu kantitatea',
+    'diferent_market_product' => 'Supermerkatuko produktu desberdina.',
+    'product_not_add_to_cart' => 'Produktua ez da saskira gehituko.'
 ];

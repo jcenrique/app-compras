@@ -1,12 +1,13 @@
 <x-filament-panels::page>
     <div>
-        {{ $this->form }}
+        {{-- {{ $this->form }} --}}
 
     </div>
 
 
 
     <div>
+       
 
         {{ $this->table }}
     </div>

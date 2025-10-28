@@ -1,9 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
-@import '../../../../vendor/filament/filament/resources/css/base.css';
-@source '../../../../vendor/bezhansalleh/filament-language-switch/resources/views/**/*.blade.php';
-@source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
 
-@config 'tailwind.config.js';
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../vendor/bezhansalleh/filament-language-switch/resources/views/**/*.blade.php';
+
+@source '../../../../resources/views/tables/**/*.blade.php';
+@source '../../../../resources/views/vendor/**/*.blade.php';

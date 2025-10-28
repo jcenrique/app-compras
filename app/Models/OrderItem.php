@@ -4,9 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Auditable as AuditingTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class OrderItem extends Model
+class OrderItem extends Model implements Auditable
 {
+
+
+    use AuditingTrait;
+
     protected $fillable = [
         'order_id',
         'product_id',

@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\OrderResource\Pages;
+namespace App\Filament\Resources\Orders\Pages;
 
-use App\Filament\Resources\OrderResource;
+use App\Filament\Resources\Orders\Pages\ShopOrder;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use App\Filament\Resources\Orders\Orders\OrderResource;
 
 use Filament\Resources\Pages\Page;
 use App\Enum\OrderStatus;
@@ -21,15 +24,11 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 
 
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action as ActionsAction;
+use Filament\Support\Enums\Width;
 
 use Filament\Tables\Columns\Summarizers\Summarizer;
 use Filament\Tables\Columns\TextColumn;
@@ -46,7 +45,7 @@ class ShopOrder extends  Page implements HasTable
 {
     protected static string $resource = OrderResource::class;
 
-    protected static string $view = 'filament.app.resources.order-resource.pages.shop-order';
+    protected string $view = 'filament.app.resources.order-resource.pages.shop-order';
     use InteractsWithRecord;
     use InteractsWithTable;
 
@@ -140,11 +139,11 @@ class ShopOrder extends  Page implements HasTable
                     ->label(__('common.quantity'))
                     ->tooltip(__('common.change_quantity_tooltip'))
                     ->action(
-                        ActionsAction::make('change_quantity')
+                        Action::make('change_quantity')
 
                             ->icon('heroicon-o-pencil')
                             ->label(__('common.change_quantity'))
-                            ->form(fn($record) => [
+                            ->schema(fn($record) => [
                                 TextInput::make('quantity')
                                     ->label(__('common.quantity'))
                                     ->default($record->quantity)
@@ -152,7 +151,7 @@ class ShopOrder extends  Page implements HasTable
                                     ->required(),
 
                             ])
-                            ->modalWidth(MaxWidth::Medium)
+                            ->modalWidth(Width::Medium)
                             ->action(fn($record, array $data) => $record->update(['quantity' => $data['quantity']]))
                         //->visible(fn() => auth()->user()->can('edit_name'))
                     )
@@ -161,7 +160,7 @@ class ShopOrder extends  Page implements HasTable
                  ProductImageColumn::make('producto')
                     ->label(__('common.product'))
                     ->tooltip(fn($record) => $record->product->name),
-                    
+
                 // ImageColumn::make('product.image')
                 //     ->label(__('common.image'))
                 //     ->circular()
@@ -194,7 +193,7 @@ class ShopOrder extends  Page implements HasTable
                     })
                     ->summarize(
                         Summarizer::make()
-                            ->prefix(new HtmlString('<strong class="danger">' .  __('common.total') . ': </strong>'))
+                            ->prefix(new HtmlString('<strong class="text-red-800">' .  __('common.total') . ': </strong>'))
 
                             ->using(function ($query) {
                                 $items = $query->get();
@@ -214,10 +213,10 @@ class ShopOrder extends  Page implements HasTable
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 // ...
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 // ...
             ]);
     }
@@ -263,7 +262,7 @@ class ShopOrder extends  Page implements HasTable
 
 
             Action::make(__('common.save_pending'))
-                ->form([
+                ->schema([
                   DatePicker::make('new_order_date')
                                         ->label(__('common.order_date'))
                                         ->displayFormat('d/m/Y')
@@ -317,7 +316,7 @@ class ShopOrder extends  Page implements HasTable
                 ->hiddenLabel(true)
                 ->tooltip(__('common.add_to_basket'))
                 ->requiresConfirmation()
-                ->form([
+                ->schema([
                     Select::make('product_id')
                         ->label(__('common.product'))
                         ->searchable()

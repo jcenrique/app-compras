@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\OrderResource\Pages;
+namespace App\Filament\Resources\Orders\Pages;
 
-use App\Filament\Resources\OrderResource;
+use App\Filament\Resources\Orders\Pages\EditOrder;
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\Orders\Orders\OrderResource;
 use App\Models\Order;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -14,7 +16,7 @@ class ListOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 
 
                 ->createAnother(false)
